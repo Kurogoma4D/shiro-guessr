@@ -1,0 +1,14 @@
+<div class="color-palette" role="grid" aria-label="Color palette">
+  @for (paletteColor of colors(); track $index) {
+    <button
+      class="color-cell"
+      [style.background-color]="getColorString(paletteColor.color)"
+      [disabled]="disabled()"
+      [attr.aria-label]="getAriaLabel(paletteColor.color, $index)"
+      [attr.tabindex]="disabled() ? -1 : 0"
+      (click)="onColorClick(paletteColor.color)"
+      (keydown)="onColorKeydown($event, paletteColor.color)"
+      role="gridcell"
+    ></button>
+  }
+</div>

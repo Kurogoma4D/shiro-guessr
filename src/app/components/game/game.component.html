@@ -1,0 +1,64 @@
+<div class="game-container">
+  @if (gameState().isCompleted) {
+    <!-- Result Screen -->
+    <app-result
+      [gameState]="gameState()"
+      (replay)="onReplay()"
+    ></app-result>
+  } @else {
+    <!-- Active Game Screen -->
+    <div class="game-screen">
+      <!-- Score Board -->
+      <app-score-board
+        [currentRound]="currentRound()?.roundNumber ?? 1"
+        [totalRounds]="5"
+        [currentScore]="currentRound()?.score ?? 0"
+        [totalScore]="gameState().totalScore"
+      ></app-score-board>
+
+      <!-- Target Color Display -->
+      @if (currentRound()) {
+        <div class="target-section">
+          <h2 class="target-title">Find this color:</h2>
+          <div class="target-color-display"
+               [style.background-color]="'rgb(' + currentRound()!.targetColor.r + ', ' + currentRound()!.targetColor.g + ', ' + currentRound()!.targetColor.b + ')'">
+          </div>
+          @if (!isRoundCompleted()) {
+            <p class="instruction-text">Select the matching color from the palette below</p>
+          }
+        </div>
+
+        <!-- Color Palette -->
+        <app-color-palette
+          [colors]="currentRound()!.paletteColors"
+          [disabled]="isRoundCompleted()"
+          (colorSelected)="onColorSelected($event)"
+        ></app-color-palette>
+
+        <!-- Round Feedback -->
+        @if (isRoundCompleted()) {
+          <div class="round-feedback">
+            <div class="feedback-content" [class.perfect]="currentRound()!.distance === 0"
+                                          [class.excellent]="currentRound()!.distance! > 0 && currentRound()!.distance! <= 5"
+                                          [class.good]="currentRound()!.distance! > 5 && currentRound()!.distance! <= 15">
+              <div class="feedback-score">
+                <span class="score-label">Score:</span>
+                <span class="score-value">{{ currentRound()!.score }}</span>
+              </div>
+              <div class="feedback-distance">
+                <span class="distance-label">Distance:</span>
+                <span class="distance-value">{{ currentRound()!.distance }}</span>
+              </div>
+            </div>
+
+            @if (showNextButton()) {
+              <button class="next-button" (click)="onNextRound()" type="button">
+                Next Round →
+              </button>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

@@ -63,104 +63,104 @@
 ## Phase 3: UIコンポーネント
 
 ### 3.1 ColorPaletteComponent実装
-- [ ] `src/app/components/color-palette/` ディレクトリを作成
-- [ ] `ng generate component` でコンポーネント生成
-- [ ] `color-palette.component.ts` を実装
-  - [ ] `input()` 定義
-    - [ ] `colors: input<PaletteColor[]>()`
-    - [ ] `disabled: input<boolean>()`
-  - [ ] `output()` 定義
-    - [ ] `colorSelected: output<RGBColor>()`
-  - [ ] `ChangeDetectionStrategy.OnPush` を設定
-  - [ ] テンプレートの実装
-    - [ ] `@for` で25色を5x5グリッドで表示
-    - [ ] `button` 要素で各色を表示（アクセシビリティ）
-    - [ ] ARIA属性の設定（`role`, `aria-label`）
-    - [ ] キーボード操作対応（`tabindex`, `@keydown.enter`）
-- [ ] `color-palette.component.css` を実装
-  - [ ] CSS Gridレイアウト（`grid-template-columns: repeat(5, 1fr)`）
-  - [ ] 各セルのスタイリング（ボーダー、影）
-  - [ ] ホバー効果（拡大アニメーション）
-  - [ ] フォーカスインジケーター
-- [ ] `color-palette.component.spec.ts` でテスト作成
-  - [ ] 25色の表示テスト
-  - [ ] クリックイベントのテスト
-  - [ ] disabled状態のテスト
+- [x] `src/app/components/color-palette/` ディレクトリを作成
+- [x] `ng generate component` でコンポーネント生成
+- [x] `color-palette.component.ts` を実装
+  - [x] `input()` 定義
+    - [x] `colors: input<PaletteColor[]>()`
+    - [x] `disabled: input<boolean>()`
+  - [x] `output()` 定義
+    - [x] `colorSelected: output<RGBColor>()`
+  - [x] `ChangeDetectionStrategy.OnPush` を設定
+  - [x] テンプレートの実装
+    - [x] `@for` で25色を5x5グリッドで表示
+    - [x] `button` 要素で各色を表示（アクセシビリティ）
+    - [x] ARIA属性の設定（`role`, `aria-label`）
+    - [x] キーボード操作対応（`tabindex`, `@keydown.enter`）
+- [x] `color-palette.component.css` を実装
+  - [x] CSS Gridレイアウト（`grid-template-columns: repeat(5, 1fr)`）
+  - [x] 各セルのスタイリング（ボーダー、影）
+  - [x] ホバー効果（拡大アニメーション）
+  - [x] フォーカスインジケーター
+- [x] `color-palette.component.spec.ts` でテスト作成
+  - [x] 25色の表示テスト
+  - [x] クリックイベントのテスト
+  - [x] disabled状態のテスト
 
 ### 3.2 ScoreBoardComponent実装
-- [ ] `src/app/components/score-board/` ディレクトリを作成
-- [ ] `ng generate component` でコンポーネント生成
-- [ ] `score-board.component.ts` を実装
-  - [ ] `input()` 定義
-    - [ ] `currentRound: input<number>()`
-    - [ ] `totalRounds: input<number>()`
-    - [ ] `currentScore: input<number>()`
-    - [ ] `totalScore: input<number>()`
-  - [ ] `ChangeDetectionStrategy.OnPush` を設定
-  - [ ] テンプレートの実装
-    - [ ] ラウンド進捗表示
-    - [ ] 現在のスコア表示
-    - [ ] 累計スコア表示
-    - [ ] プログレスバー
-- [ ] `score-board.component.css` を実装
-  - [ ] レイアウト設計
-  - [ ] プログレスバーのスタイリング
-- [ ] `score-board.component.spec.ts` でテスト作成
+- [x] `src/app/components/score-board/` ディレクトリを作成
+- [x] `ng generate component` でコンポーネント生成
+- [x] `score-board.component.ts` を実装
+  - [x] `input()` 定義
+    - [x] `currentRound: input<number>()`
+    - [x] `totalRounds: input<number>()`
+    - [x] `currentScore: input<number>()`
+    - [x] `totalScore: input<number>()`
+  - [x] `ChangeDetectionStrategy.OnPush` を設定
+  - [x] テンプレートの実装
+    - [x] ラウンド進捗表示
+    - [x] 現在のスコア表示
+    - [x] 累計スコア表示
+    - [x] プログレスバー
+- [x] `score-board.component.css` を実装
+  - [x] レイアウト設計
+  - [x] プログレスバーのスタイリング
+- [x] `score-board.component.spec.ts` でテスト作成
 
 ### 3.3 RoundDetailComponent実装
-- [ ] `src/app/components/round-detail/` ディレクトリを作成
-- [ ] `ng generate component` でコンポーネント生成
-- [ ] `round-detail.component.ts` を実装
-  - [ ] `input()` 定義
-    - [ ] `round: input<GameRound>()`
-  - [ ] `ChangeDetectionStrategy.OnPush` を設定
-  - [ ] テンプレートの実装
-    - [ ] ラウンド番号表示
-    - [ ] 選択した色（カラーサンプル + RGB値）
-    - [ ] 正解の色（カラーサンプル + RGB値）
-    - [ ] 距離とスコア表示
-- [ ] `round-detail.component.css` を実装
-- [ ] `round-detail.component.spec.ts` でテスト作成
+- [x] `src/app/components/round-detail/` ディレクトリを作成
+- [x] `ng generate component` でコンポーネント生成
+- [x] `round-detail.component.ts` を実装
+  - [x] `input()` 定義
+    - [x] `round: input<GameRound>()`
+  - [x] `ChangeDetectionStrategy.OnPush` を設定
+  - [x] テンプレートの実装
+    - [x] ラウンド番号表示
+    - [x] 選択した色（カラーサンプル + RGB値）
+    - [x] 正解の色（カラーサンプル + RGB値）
+    - [x] 距離とスコア表示
+- [x] `round-detail.component.css` を実装
+- [x] `round-detail.component.spec.ts` でテスト作成
 
 ### 3.4 ResultComponent実装
-- [ ] `src/app/components/result/` ディレクトリを作成
-- [ ] `ng generate component` でコンポーネント生成
-- [ ] `result.component.ts` を実装
-  - [ ] `input()` 定義
-    - [ ] `gameState: input<GameState>()`
-  - [ ] `output()` 定義
-    - [ ] `replay: output<void>()`
-  - [ ] `ChangeDetectionStrategy.OnPush` を設定
-  - [ ] パフォーマンス評価ロジック実装
-    - [ ] スコアに応じた評価メッセージ（"Excellent!", "Good", "Try Again"）
-  - [ ] テンプレートの実装
-    - [ ] 最終スコア表示（大きく）
-    - [ ] `@for` で各ラウンドの詳細表示（RoundDetailComponent使用）
-    - [ ] パフォーマンス評価表示
-    - [ ] リプレイボタン
-- [ ] `result.component.css` を実装
-  - [ ] 最終スコアの強調スタイル
-  - [ ] リプレイボタンのスタイリング
-- [ ] `result.component.spec.ts` でテスト作成
+- [x] `src/app/components/result/` ディレクトリを作成
+- [x] `ng generate component` でコンポーネント生成
+- [x] `result.component.ts` を実装
+  - [x] `input()` 定義
+    - [x] `gameState: input<GameState>()`
+  - [x] `output()` 定義
+    - [x] `replay: output<void>()`
+  - [x] `ChangeDetectionStrategy.OnPush` を設定
+  - [x] パフォーマンス評価ロジック実装
+    - [x] スコアに応じた評価メッセージ（"Excellent!", "Good", "Try Again"）
+  - [x] テンプレートの実装
+    - [x] 最終スコア表示（大きく）
+    - [x] `@for` で各ラウンドの詳細表示（RoundDetailComponent使用）
+    - [x] パフォーマンス評価表示
+    - [x] リプレイボタン
+- [x] `result.component.css` を実装
+  - [x] 最終スコアの強調スタイル
+  - [x] リプレイボタンのスタイリング
+- [x] `result.component.spec.ts` でテスト作成
 
 ### 3.5 GameComponent実装
-- [ ] `src/app/components/game/` ディレクトリを作成
-- [ ] `ng generate component` でコンポーネント生成
-- [ ] `game.component.ts` を実装
-  - [ ] GameServiceを依存性注入（`inject()`使用）
-  - [ ] `computed()` でゲーム状態取得
-  - [ ] `ChangeDetectionStrategy.OnPush` を設定
-  - [ ] イベントハンドラ実装
-    - [ ] `onColorSelected(color: RGBColor)` - 色選択時の処理
-    - [ ] `onNextRound()` - 次のラウンドへ
-    - [ ] `onReplay()` - リプレイ処理
-  - [ ] テンプレートの実装
-    - [ ] `@if` でゲーム完了状態を判定
-    - [ ] ゲーム中: ScoreBoard + ColorPalette表示
-    - [ ] 完了後: Result表示
-- [ ] `game.component.css` を実装
-  - [ ] メインレイアウト設計
-- [ ] `game.component.spec.ts` でテスト作成
+- [x] `src/app/components/game/` ディレクトリを作成
+- [x] `ng generate component` でコンポーネント生成
+- [x] `game.component.ts` を実装
+  - [x] GameServiceを依存性注入（`inject()`使用）
+  - [x] `computed()` でゲーム状態取得
+  - [x] `ChangeDetectionStrategy.OnPush` を設定
+  - [x] イベントハンドラ実装
+    - [x] `onColorSelected(color: RGBColor)` - 色選択時の処理
+    - [x] `onNextRound()` - 次のラウンドへ
+    - [x] `onReplay()` - リプレイ処理
+  - [x] テンプレートの実装
+    - [x] `@if` でゲーム完了状態を判定
+    - [x] ゲーム中: ScoreBoard + ColorPalette表示
+    - [x] 完了後: Result表示
+- [x] `game.component.css` を実装
+  - [x] メインレイアウト設計
+- [x] `game.component.spec.ts` でテスト作成
 
 ## Phase 4: 統合とポリッシュ
 

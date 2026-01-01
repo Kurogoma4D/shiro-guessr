@@ -1,0 +1,215 @@
+.result-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.game-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 24px 0;
+}
+
+.final-score-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  margin-bottom: 24px;
+}
+
+.score-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.performance-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.final-score {
+  font-size: 72px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: countUp 0.8s ease;
+}
+
+@keyframes countUp {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.score-subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 16px;
+}
+
+.performance-message {
+  font-size: 18px;
+  opacity: 0.95;
+  font-style: italic;
+}
+
+.replay-button {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  padding: 16px 48px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.replay-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.replay-button:active {
+  transform: translateY(0);
+}
+
+.replay-icon {
+  font-size: 24px;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.replay-button:hover .replay-icon {
+  animation-duration: 0.5s;
+}
+
+.rounds-breakdown {
+  margin-top: 40px;
+}
+
+.breakdown-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #667eea;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .result-container {
+    padding: 20px;
+  }
+
+  .game-title {
+    font-size: 28px;
+  }
+
+  .final-score-section {
+    padding: 32px 24px;
+  }
+
+  .score-emoji {
+    font-size: 48px;
+  }
+
+  .performance-title {
+    font-size: 24px;
+  }
+
+  .final-score {
+    font-size: 56px;
+  }
+
+  .replay-button {
+    padding: 14px 40px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-container {
+    padding: 16px;
+  }
+
+  .game-title {
+    font-size: 24px;
+  }
+
+  .final-score-section {
+    padding: 24px 16px;
+  }
+
+  .score-emoji {
+    font-size: 40px;
+  }
+
+  .performance-title {
+    font-size: 20px;
+  }
+
+  .final-score {
+    font-size: 48px;
+  }
+
+  .score-subtitle {
+    font-size: 14px;
+  }
+
+  .performance-message {
+    font-size: 16px;
+  }
+
+  .replay-button {
+    padding: 12px 32px;
+    font-size: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .breakdown-title {
+    font-size: 20px;
+  }
+}

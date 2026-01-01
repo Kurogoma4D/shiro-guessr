@@ -1,0 +1,142 @@
+.score-board {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.score-board-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.progress-section {
+  margin-bottom: 20px;
+}
+
+.round-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.round-label {
+  opacity: 0.9;
+}
+
+.round-value {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: white;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.score-section {
+  display: flex;
+  gap: 16px;
+  justify-content: space-around;
+}
+
+.score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.score-label {
+  font-size: 12px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.score-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.score-value.highlight {
+  font-size: 32px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.current-score {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.total-score {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .score-board {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .score-value {
+    font-size: 20px;
+  }
+
+  .score-value.highlight {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-board {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .score-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .score-value {
+    font-size: 18px;
+  }
+
+  .score-value.highlight {
+    font-size: 24px;
+  }
+}

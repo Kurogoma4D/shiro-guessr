@@ -1,0 +1,25 @@
+<div class="result-container">
+  <div class="result-header">
+    <h1 class="game-title">Game Complete!</h1>
+
+    <div class="final-score-section">
+      <div class="score-emoji">{{ performanceMessage().emoji }}</div>
+      <div class="performance-title">{{ performanceMessage().title }}</div>
+      <div class="final-score">{{ gameState().totalScore }}</div>
+      <div class="score-subtitle">out of {{ 5000 }} points ({{ scorePercentage() }}%)</div>
+      <div class="performance-message">{{ performanceMessage().message }}</div>
+    </div>
+
+    <button class="replay-button" (click)="onReplayClick()" type="button">
+      <span class="replay-icon">🔄</span>
+      <span>Play Again</span>
+    </button>
+  </div>
+
+  <div class="rounds-breakdown">
+    <h2 class="breakdown-title">Round Breakdown</h2>
+    @for (round of gameState().rounds; track round.roundNumber) {
+      <app-round-detail [round]="round"></app-round-detail>
+    }
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="round-detail">
+  <div class="round-header">
+    <h3 class="round-number">Round {{ round().roundNumber }}</h3>
+    <div class="score-badge" [class.perfect]="round().distance === 0">
+      {{ round().score }} pts
+    </div>
+  </div>
+
+  <div class="colors-comparison">
+    <div class="color-info">
+      <span class="color-label">Your Choice</span>
+      <div class="color-sample"
+           [style.background-color]="getColorString(round().selectedColor!.r, round().selectedColor!.g, round().selectedColor!.b)">
+      </div>
+      <span class="color-rgb">
+        RGB({{ round().selectedColor!.r }}, {{ round().selectedColor!.g }}, {{ round().selectedColor!.b }})
+      </span>
+    </div>
+
+    <div class="comparison-arrow">
+      →
+    </div>
+
+    <div class="color-info">
+      <span class="color-label">Target</span>
+      <div class="color-sample"
+           [style.background-color]="getColorString(round().targetColor.r, round().targetColor.g, round().targetColor.b)">
+      </div>
+      <span class="color-rgb">
+        RGB({{ round().targetColor.r }}, {{ round().targetColor.g }}, {{ round().targetColor.b }})
+      </span>
+    </div>
+  </div>
+
+  <div class="distance-info">
+    <span class="distance-label">Distance:</span>
+    <span class="distance-value" [class.excellent]="round().distance! <= 5"
+                                   [class.good]="round().distance! > 5 && round().distance! <= 15">
+      {{ round().distance }}
+    </span>
+  </div>
+</div>

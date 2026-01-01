@@ -1,6 +1,7 @@
 .game-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%);
+  /* M3 Surface background */
+  background-color: var(--md-sys-color-surface);
   padding: 20px;
 }
 
@@ -15,9 +16,13 @@
 }
 
 .target-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
+  /* M3 Headline Small */
+  font-family: var(--md-sys-typescale-headline-small-font);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: var(--md-sys-typescale-headline-small-weight);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
+  letter-spacing: var(--md-sys-typescale-headline-small-tracking);
+  color: var(--md-sys-color-on-surface);
   margin: 0 0 16px 0;
 }
 
@@ -25,39 +30,52 @@
   width: 200px;
   height: 200px;
   margin: 0 auto 16px;
-  border-radius: 16px;
-  border: 4px solid white;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
+  /* M3 Large shape */
+  border-radius: var(--md-sys-shape-corner-large);
+  border: 4px solid var(--md-sys-color-surface-container-highest);
+  /* M3 Elevation level 2 */
+  box-shadow: var(--md-sys-elevation-level2);
+  /* M3 Standard easing */
+  transition: transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
 }
 
 .target-color-display:hover {
-  transform: scale(1.05);
+  /* M3 Expressive scale (slightly exaggerated) */
+  transform: scale(1.08);
 }
 
 .instruction-text {
-  color: #666;
-  font-size: 16px;
+  /* M3 Body Large */
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  color: var(--md-sys-color-on-surface-variant);
   margin: 0;
 }
 
 .round-feedback {
-  background: white;
-  border-radius: 12px;
+  /* M3 Surface container */
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
   padding: 24px;
   margin-top: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  animation: slideUp 0.4s ease;
+  /* M3 Elevation level 1 */
+  box-shadow: var(--md-sys-elevation-level1);
+  /* M3 Expressive enter animation */
+  animation: md-expressive-enter var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
-@keyframes slideUp {
+/* M3 Expressive Enter Animation */
+@keyframes md-expressive-enter {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -66,24 +84,27 @@
   justify-content: space-around;
   gap: 24px;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: var(--md-sys-shape-corner-small);
   margin-bottom: 16px;
-  background: #f8f9fa;
+  /* Default M3 surface variant */
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
+/* M3 Color roles for performance states */
 .feedback-content.perfect {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  color: white;
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 .feedback-content.excellent {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .feedback-content.good {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .feedback-score,
@@ -96,36 +117,75 @@
 
 .score-label,
 .distance-label {
-  font-size: 14px;
-  font-weight: 600;
+  /* M3 Label Large */
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .score-value,
 .distance-value {
-  font-size: 32px;
+  /* M3 Headline Large */
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
   font-weight: 700;
+  line-height: var(--md-sys-typescale-headline-large-line-height);
 }
 
 .next-button {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  /* M3 Filled Button (Primary) */
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   border: none;
   padding: 16px 32px;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 8px;
+  min-height: 48px; /* M3 minimum touch target */
+  /* M3 Label Large */
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  /* M3 Full shape (pill) */
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  /* M3 transitions */
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+  /* M3 Elevation level 0 for filled buttons */
+  box-shadow: var(--md-sys-elevation-level0);
+  position: relative;
+  overflow: hidden;
+}
+
+/* M3 State layer */
+.next-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-primary);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.next-button:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
 }
 
 .next-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  /* M3 Elevation level 1 on hover */
+  box-shadow: var(--md-sys-elevation-level1);
+  transform: translateY(-1px);
+}
+
+.next-button:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .next-button:active {

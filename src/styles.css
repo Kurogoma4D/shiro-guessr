@@ -1,4 +1,6 @@
 /* Global Styles for ShiroGuessr */
+/* Import M3 Design Tokens */
+@import './m3-tokens.css';
 
 /* CSS Reset and Normalize */
 *,
@@ -105,11 +107,17 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  color: var(--color-gray-900);
-  background: var(--color-bg-primary);
+  /* M3 Typography - Body Large */
+  font-family: var(--md-sys-typescale-body-large-font, var(--font-family-base));
+  font-size: var(--md-sys-typescale-body-large-size, var(--font-size-base));
+  font-weight: var(--md-sys-typescale-body-large-weight, var(--font-weight-normal));
+  line-height: var(--md-sys-typescale-body-large-line-height, 1.5);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking, 0);
+  /* M3 Surface colors */
+  color: var(--md-sys-color-on-surface, var(--color-gray-900));
+  background-color: var(--md-sys-color-surface, var(--color-bg-primary));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Typography */
@@ -155,17 +163,18 @@ p {
 
 /* Links */
 a {
-  color: var(--color-primary);
+  color: var(--md-sys-color-primary, var(--color-primary));
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--md-sys-motion-duration-short2, var(--transition-fast)) var(--md-sys-motion-easing-standard, ease);
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--md-sys-color-primary, var(--color-primary-dark));
+  text-decoration: underline;
 }
 
-a:focus {
-  outline: 2px solid var(--color-primary);
+a:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary, var(--color-primary));
   outline-offset: 2px;
 }
 
@@ -183,8 +192,8 @@ button:disabled {
   opacity: 0.6;
 }
 
-button:focus {
-  outline: 2px solid var(--color-primary);
+button:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary, var(--color-primary));
   outline-offset: 2px;
 }
 
@@ -201,10 +210,11 @@ button:focus {
   border-width: 0;
 }
 
-/* Focus visible (keyboard navigation) */
+/* Focus visible (keyboard navigation) - M3 */
 *:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--md-sys-color-primary, var(--color-primary));
   outline-offset: 2px;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
 }
 
 /* Reduced motion */

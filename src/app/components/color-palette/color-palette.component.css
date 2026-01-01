@@ -9,34 +9,69 @@
 
 .color-cell {
   aspect-ratio: 1;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+  /* M3 Outline */
+  border: 1px solid var(--md-sys-color-outline);
+  /* M3 Medium shape */
+  border-radius: var(--md-sys-shape-corner-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* M3 Standard transitions */
+  transition:
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+    border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  /* M3 Elevation level 1 */
+  box-shadow: var(--md-sys-elevation-level1);
   padding: 0;
   min-height: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* M3 State layer */
+.color-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-surface);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.color-cell:hover:not(:disabled)::before {
+  opacity: var(--md-sys-state-hover-opacity);
 }
 
 .color-cell:hover:not(:disabled) {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-color: #666;
+  /* M3 Expressive scale */
+  transform: scale(1.08);
+  /* M3 Elevation level 2 */
+  box-shadow: var(--md-sys-elevation-level2);
+  border-color: var(--md-sys-color-primary);
   z-index: 1;
 }
 
-.color-cell:focus {
-  outline: 3px solid #4285f4;
+.color-cell:focus-visible {
+  /* M3 Focus outline */
+  outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 
+.color-cell:active:not(:disabled)::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
 .color-cell:active:not(:disabled) {
-  transform: scale(1.05);
+  transform: scale(1.0);
+  /* M3 Emphasized accelerate for press */
+  transition-timing-function: var(--md-sys-motion-easing-emphasized-accelerate);
+  transition-duration: var(--md-sys-motion-duration-short2);
 }
 
 .color-cell:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.38; /* M3 disabled opacity */
   filter: grayscale(0.3);
 }
 

@@ -3,35 +3,35 @@
 ## Phase 1: 基盤構築
 
 ### 1.1 データモデル定義
-- [ ] `src/app/models/` ディレクトリを作成
-- [ ] `game.model.ts` を作成
-  - [ ] `RGBColor` インターフェースを定義
-  - [ ] `GameRound` インターフェースを定義
-  - [ ] `GameState` インターフェースを定義
-  - [ ] `PaletteColor` インターフェースを定義
+- [x] `src/app/models/` ディレクトリを作成
+- [x] `game.model.ts` を作成
+  - [x] `RGBColor` インターフェースを定義
+  - [x] `GameRound` インターフェースを定義
+  - [x] `GameState` インターフェースを定義
+  - [x] `PaletteColor` インターフェースを定義
 
 ### 1.2 ColorService実装
-- [ ] `src/app/services/` ディレクトリを作成
-- [ ] `color.service.ts` を作成
-  - [ ] `generateRandomWhiteColor()` メソッドを実装（RGB 245-255のランダム生成）
-  - [ ] `generateAllWhiteColors()` メソッドを実装（全1,331通りの白色を生成）
-  - [ ] `getRandomPaletteColors(count: number)` メソッドを実装（25色のランダムサンプリング）
-  - [ ] `calculateManhattanDistance(color1, color2)` メソッドを実装
-  - [ ] `rgbToString(color)` メソッドを実装（CSS color文字列への変換）
-- [ ] `color.service.spec.ts` でユニットテストを作成
-  - [ ] `generateRandomWhiteColor` のテスト（範囲チェック）
-  - [ ] `calculateManhattanDistance` のテスト（計算ロジック）
-  - [ ] `rgbToString` のテスト（フォーマット確認）
+- [x] `src/app/services/` ディレクトリを作成
+- [x] `color.service.ts` を作成
+  - [x] `generateRandomWhiteColor()` メソッドを実装（RGB 245-255のランダム生成）
+  - [x] `generateAllWhiteColors()` メソッドを実装（全1,331通りの白色を生成）
+  - [x] `getRandomPaletteColors(count: number)` メソッドを実装（25色のランダムサンプリング）
+  - [x] `calculateManhattanDistance(color1, color2)` メソッドを実装
+  - [x] `rgbToString(color)` メソッドを実装（CSS color文字列への変換）
+- [x] `color.service.spec.ts` でユニットテストを作成
+  - [x] `generateRandomWhiteColor` のテスト（範囲チェック）
+  - [x] `calculateManhattanDistance` のテスト（計算ロジック）
+  - [x] `rgbToString` のテスト（フォーマット確認）
 
 ### 1.3 ScoreService実装
-- [ ] `score.service.ts` を作成
-  - [ ] `calculateRoundScore(distance)` メソッドを実装
-    - [ ] スコア計算式: `1000 × (1 - distance / 30)`
-  - [ ] `calculateTotalScore(rounds)` メソッドを実装
-- [ ] `score.service.spec.ts` でユニットテストを作成
-  - [ ] 距離0の場合のテスト（1000ポイント）
-  - [ ] 距離30の場合のテスト（0ポイント）
-  - [ ] 複数ラウンドの合計スコアテスト
+- [x] `score.service.ts` を作成
+  - [x] `calculateRoundScore(distance)` メソッドを実装
+    - [x] スコア計算式: `1000 × (1 - distance / 30)`
+  - [x] `calculateTotalScore(rounds)` メソッドを実装
+- [x] `score.service.spec.ts` でユニットテストを作成
+  - [x] 距離0の場合のテスト（1000ポイント）
+  - [x] 距離30の場合のテスト（0ポイント）
+  - [x] 複数ラウンドの合計スコアテスト
 
 ## Phase 2: ゲームロジック
 

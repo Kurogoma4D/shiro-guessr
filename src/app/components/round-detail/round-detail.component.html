@@ -1,7 +1,7 @@
 <div class="round-detail">
   <div class="round-header">
     <h3 class="round-number">Round {{ round().roundNumber }}</h3>
-    <div class="score-badge" [class.perfect]="round().distance === 0">
+    <div class="score-badge" [class.perfect]="round().distance === 0" aria-label="Round score: {{ round().score }} points">
       {{ round().score }} pts
     </div>
   </div>
@@ -10,6 +10,8 @@
     <div class="color-info">
       <span class="color-label">Your Choice</span>
       <div class="color-sample"
+           role="img"
+           [attr.aria-label]="'Selected color: RGB ' + round().selectedColor!.r + ', ' + round().selectedColor!.g + ', ' + round().selectedColor!.b"
            [style.background-color]="getColorString(round().selectedColor!.r, round().selectedColor!.g, round().selectedColor!.b)">
       </div>
       <span class="color-rgb">
@@ -17,13 +19,15 @@
       </span>
     </div>
 
-    <div class="comparison-arrow">
+    <div class="comparison-arrow" aria-hidden="true">
       →
     </div>
 
     <div class="color-info">
       <span class="color-label">Target</span>
       <div class="color-sample"
+           role="img"
+           [attr.aria-label]="'Target color: RGB ' + round().targetColor.r + ', ' + round().targetColor.g + ', ' + round().targetColor.b"
            [style.background-color]="getColorString(round().targetColor.r, round().targetColor.g, round().targetColor.b)">
       </div>
       <span class="color-rgb">
@@ -35,7 +39,8 @@
   <div class="distance-info">
     <span class="distance-label">Distance:</span>
     <span class="distance-value" [class.excellent]="round().distance! <= 5"
-                                   [class.good]="round().distance! > 5 && round().distance! <= 15">
+                                   [class.good]="round().distance! > 5 && round().distance! <= 15"
+                                   aria-label="Manhattan distance: {{ round().distance }}">
       {{ round().distance }}
     </span>
   </div>

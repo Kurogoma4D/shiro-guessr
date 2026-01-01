@@ -2,16 +2,16 @@
   <div class="result-header">
     <h1 class="game-title">Game Complete!</h1>
 
-    <div class="final-score-section">
-      <div class="score-emoji">{{ performanceMessage().emoji }}</div>
+    <div class="final-score-section" role="region" aria-label="Final score">
+      <div class="score-emoji" role="img" aria-label="{{ performanceMessage().title }}">{{ performanceMessage().emoji }}</div>
       <div class="performance-title">{{ performanceMessage().title }}</div>
-      <div class="final-score">{{ gameState().totalScore }}</div>
+      <div class="final-score" aria-label="Final score: {{ gameState().totalScore }} points">{{ gameState().totalScore }}</div>
       <div class="score-subtitle">out of {{ 5000 }} points ({{ scorePercentage() }}%)</div>
       <div class="performance-message">{{ performanceMessage().message }}</div>
     </div>
 
-    <button class="replay-button" (click)="onReplayClick()" type="button">
-      <span class="replay-icon">🔄</span>
+    <button class="replay-button" (click)="onReplayClick()" type="button" aria-label="Start a new game">
+      <span class="replay-icon" role="img" aria-label="Replay">🔄</span>
       <span>Play Again</span>
     </button>
   </div>

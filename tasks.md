@@ -36,29 +36,29 @@
 ## Phase 2: ゲームロジック
 
 ### 2.1 GameService実装
-- [ ] `game.service.ts` を作成
-  - [ ] Signalsの定義
-    - [ ] `gameState` signal（WritableSignal<GameState>）
-    - [ ] `currentRound` computed signal
-    - [ ] `isGameActive` computed signal
-  - [ ] `startNewGame()` メソッドを実装
-    - [ ] 初期状態の設定
-    - [ ] 最初のラウンドの開始
-  - [ ] `selectColor(color)` メソッドを実装
-    - [ ] マンハッタン距離の計算
-    - [ ] スコアの計算
-    - [ ] GameRoundの更新
-  - [ ] `nextRound()` メソッドを実装
-    - [ ] 次のラウンドへの移行
-    - [ ] ゲーム完了判定
-  - [ ] `resetGame()` メソッドを実装
-  - [ ] `replayGame()` メソッドを実装
-- [ ] ColorServiceとScoreServiceを依存性注入（`inject()`使用）
-- [ ] `game.service.spec.ts` でユニットテストを作成
-  - [ ] ゲーム開始のテスト
-  - [ ] 色選択のテスト
-  - [ ] ラウンド進行のテスト
-  - [ ] ゲーム完了のテスト
+- [x] `game.service.ts` を作成
+  - [x] Signalsの定義
+    - [x] `gameState` signal（WritableSignal<GameState>）
+    - [x] `currentRound` computed signal
+    - [x] `isGameActive` computed signal
+  - [x] `startNewGame()` メソッドを実装
+    - [x] 初期状態の設定
+    - [x] 最初のラウンドの開始
+  - [x] `selectColor(color)` メソッドを実装
+    - [x] マンハッタン距離の計算
+    - [x] スコアの計算
+    - [x] GameRoundの更新
+  - [x] `nextRound()` メソッドを実装
+    - [x] 次のラウンドへの移行
+    - [x] ゲーム完了判定
+  - [x] `resetGame()` メソッドを実装
+  - [x] `replayGame()` メソッドを実装
+- [x] ColorServiceとScoreServiceを依存性注入（`inject()`使用）
+- [x] `game.service.spec.ts` でユニットテストを作成
+  - [x] ゲーム開始のテスト
+  - [x] 色選択のテスト
+  - [x] ラウンド進行のテスト
+  - [x] ゲーム完了のテスト
 
 ## Phase 3: UIコンポーネント
 

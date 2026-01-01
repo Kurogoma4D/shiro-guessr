@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { RGBColor } from '../../models/game.model';
 import { ColorPaletteComponent } from '../color-palette/color-palette.component';
 import { ScoreBoardComponent } from '../score-board/score-board.component';
 import { ResultComponent } from '../result/result.component';
+import { RoundResultDialog } from '../round-result-dialog/round-result-dialog';
 
 /**
  * Main game component that orchestrates the game flow
@@ -12,7 +13,7 @@ import { ResultComponent } from '../result/result.component';
  */
 @Component({
   selector: 'app-game',
-  imports: [CommonModule, ColorPaletteComponent, ScoreBoardComponent, ResultComponent],
+  imports: [CommonModule, ColorPaletteComponent, ScoreBoardComponent, ResultComponent, RoundResultDialog],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,6 +57,19 @@ export class GameComponent {
   });
 
   /**
+   * Signal to control dialog visibility
+   */
+  readonly showDialog = signal(false);
+
+  /**
+   * Computed signal to check if this is the last round
+   */
+  readonly isLastRound = computed(() => {
+    const state = this.gameState();
+    return state.currentRoundIndex === 4; // 0-based index, so 4 is the 5th round
+  });
+
+  /**
    * Initializes the component and starts a new game
    */
   constructor() {
@@ -68,6 +82,8 @@ export class GameComponent {
    */
   onColorSelected(color: RGBColor): void {
     this.gameService.selectColor(color);
+    // Show dialog after color selection
+    this.showDialog.set(true);
   }
 
   /**
@@ -82,5 +98,13 @@ export class GameComponent {
    */
   onReplay(): void {
     this.gameService.replayGame();
+  }
+
+  /**
+   * Handles Next Round button click from dialog
+   */
+  onDialogNextRound(): void {
+    this.showDialog.set(false);
+    this.onNextRound();
   }
 }

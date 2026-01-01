@@ -1,34 +1,28 @@
 <div class="score-board">
-  <div class="score-board-header">
-    <h2 class="title">ShiroGuessr</h2>
-  </div>
-
-  <div class="progress-section">
-    <div class="round-info">
-      <span class="round-label">Round</span>
-      <span class="round-value">{{ currentRound() }} / {{ totalRounds() }}</span>
+  <div class="score-board-content">
+    <div class="title-section">
+      <h1 class="title">ShiroGuessr</h1>
     </div>
-    <div class="progress-bar-container" role="progressbar"
-         [attr.aria-valuenow]="currentRound()"
-         [attr.aria-valuemin]="0"
-         [attr.aria-valuemax]="totalRounds()"
-         aria-label="Game progress">
-      <div class="progress-bar-fill"
-           [style.width.%]="progressPercentage()"></div>
-    </div>
-  </div>
 
-  <div class="score-section">
-    @if (isRoundCompleted()) {
-      <div class="score-item current-score">
-        <span class="score-label">Current Round</span>
-        <span class="score-value">{{ currentScore() }}</span>
+    <div class="info-section">
+      <div class="round-info">
+        <span class="info-label">Round</span>
+        <span class="info-value">{{ currentRound() }}/{{ totalRounds() }}</span>
       </div>
-    }
 
-    <div class="score-item total-score">
-      <span class="score-label">Total Score</span>
-      <span class="score-value highlight">{{ totalScore() }}</span>
+      <div class="score-info">
+        <span class="info-label">Score</span>
+        <span class="info-value score-highlight">{{ totalScore() }}</span>
+      </div>
     </div>
+  </div>
+
+  <div class="progress-bar-container" role="progressbar"
+       [attr.aria-valuenow]="currentRound()"
+       [attr.aria-valuemin]="0"
+       [attr.aria-valuemax]="totalRounds()"
+       aria-label="Game progress">
+    <div class="progress-bar-fill"
+         [style.width.%]="progressPercentage()"></div>
   </div>
 </div>

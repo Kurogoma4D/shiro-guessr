@@ -123,18 +123,17 @@
   border: none;
   padding: 16px 48px;
   min-height: 48px; /* M3 minimum touch target */
-  /* M3 Label Large */
+  /* M3 Label Large - Enhanced visibility */
   font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font-size: 16px;
+  font-weight: 700; /* Bold for better visibility */
   line-height: var(--md-sys-typescale-label-large-line-height);
-  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  letter-spacing: 0.5px; /* Increased tracking for better readability */
+  text-transform: uppercase;
   /* M3 Full shape (pill) */
   border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  display: inline-block;
   /* M3 Elevation level 0 */
   box-shadow: var(--md-sys-elevation-level0);
   /* M3 transitions */
@@ -172,27 +171,6 @@
 
 .replay-button:active {
   transform: translateY(0);
-}
-
-.replay-icon {
-  font-size: 24px;
-  /* M3 subtle rotation animation */
-  animation: md-subtle-rotate 3s var(--md-sys-motion-easing-linear) infinite;
-}
-
-/* M3 Subtle Rotate Animation */
-@keyframes md-subtle-rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.replay-button:hover .replay-icon {
-  /* M3 Expressive faster rotation on hover */
-  animation-duration: var(--md-sys-motion-duration-long2);
 }
 
 .rounds-breakdown {
@@ -241,7 +219,6 @@
 
   .replay-button {
     padding: 14px 40px;
-    font-size: 16px;
   }
 }
 
@@ -280,9 +257,8 @@
 
   .replay-button {
     padding: 12px 32px;
-    font-size: 16px;
     width: 100%;
-    justify-content: center;
+    text-align: center;
   }
 
   .breakdown-title {

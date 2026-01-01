@@ -1,0 +1,95 @@
+<!-- M3 Dialog Scrim (Backdrop) -->
+<div class="dialog-scrim"
+     (keydown)="onKeyDown($event)"
+     role="presentation"
+     aria-hidden="true">
+
+  <!-- M3 Dialog Container -->
+  <div class="dialog-container"
+       #dialogContainer
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="dialog-title"
+       aria-describedby="dialog-content"
+       tabindex="-1">
+
+    <!-- Dialog Header -->
+    <div class="dialog-header">
+      <div class="performance-emoji" role="img" [attr.aria-label]="performanceMessage().title">
+        {{ performanceMessage().emoji }}
+      </div>
+      <h2 class="dialog-title" id="dialog-title">
+        {{ performanceMessage().title }}
+      </h2>
+      <p class="performance-subtitle">
+        {{ performanceMessage().message }}
+      </p>
+    </div>
+
+    <!-- Dialog Content -->
+    <div class="dialog-content" id="dialog-content">
+
+      <!-- Color Comparison -->
+      <div class="color-comparison">
+        <div class="color-display-wrapper">
+          <div class="color-label">Target Color</div>
+          <div class="color-display"
+               role="img"
+               [attr.aria-label]="'Target color: RGB ' + targetColor().r + ', ' + targetColor().g + ', ' + targetColor().b"
+               [style.background-color]="rgbToString(targetColor())">
+          </div>
+          <div class="color-rgb">
+            RGB({{ targetColor().r }}, {{ targetColor().g }}, {{ targetColor().b }})
+          </div>
+        </div>
+
+        <div class="comparison-arrow" aria-hidden="true">→</div>
+
+        <div class="color-display-wrapper">
+          <div class="color-label">Your Choice</div>
+          <div class="color-display"
+               role="img"
+               [attr.aria-label]="'Selected color: RGB ' + selectedColor().r + ', ' + selectedColor().g + ', ' + selectedColor().b"
+               [style.background-color]="rgbToString(selectedColor())">
+          </div>
+          <div class="color-rgb">
+            RGB({{ selectedColor().r }}, {{ selectedColor().g }}, {{ selectedColor().b }})
+          </div>
+        </div>
+      </div>
+
+      <!-- Score and Distance -->
+      <div class="metrics-container">
+        <div class="metric-card" [class.highlight]="performanceLevel() === 'perfect' || performanceLevel() === 'excellent'">
+          <div class="metric-label">Score</div>
+          <div class="metric-value" aria-label="Score: {{ score() }} points">
+            {{ score() }}
+          </div>
+          <div class="metric-subtitle">out of 1000</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Distance</div>
+          <div class="metric-value" aria-label="Distance: {{ distance() }}">
+            {{ distance() }}
+          </div>
+          <div class="metric-subtitle">Manhattan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog Actions -->
+    <div class="dialog-actions">
+      <button class="next-button"
+              (click)="onNextRound()"
+              type="button"
+              [attr.aria-label]="isLastRound() ? 'View final results' : 'Proceed to next round'">
+        @if (isLastRound()) {
+          View Results
+        } @else {
+          Next Round →
+        }
+      </button>
+    </div>
+  </div>
+</div>

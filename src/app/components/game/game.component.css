@@ -1,38 +1,46 @@
 .game-container {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   /* M3 Surface background */
   background-color: var(--md-sys-color-surface);
-  padding: 20px;
 }
 
 .game-screen {
-  max-width: 800px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
   margin: 0 auto;
+  width: 100%;
+  padding: 0 20px 20px;
+  overflow: hidden;
 }
 
 .target-section {
   text-align: center;
-  margin: 32px 0;
+  margin: 20px 0 16px;
+  flex-shrink: 0;
 }
 
 .target-title {
-  /* M3 Headline Small */
-  font-family: var(--md-sys-typescale-headline-small-font);
-  font-size: var(--md-sys-typescale-headline-small-size);
-  font-weight: var(--md-sys-typescale-headline-small-weight);
-  line-height: var(--md-sys-typescale-headline-small-line-height);
-  letter-spacing: var(--md-sys-typescale-headline-small-tracking);
+  /* M3 Title Large */
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  line-height: var(--md-sys-typescale-title-large-line-height);
+  letter-spacing: var(--md-sys-typescale-title-large-tracking);
   color: var(--md-sys-color-on-surface);
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
 }
 
 .target-color-display {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto 16px;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 12px;
   /* M3 Large shape */
   border-radius: var(--md-sys-shape-corner-large);
-  border: 4px solid var(--md-sys-color-surface-container-highest);
+  border: 3px solid var(--md-sys-color-outline-variant);
   /* M3 Elevation level 2 */
   box-shadow: var(--md-sys-elevation-level2);
   /* M3 Standard easing */
@@ -41,16 +49,16 @@
 
 .target-color-display:hover {
   /* M3 Expressive scale (slightly exaggerated) */
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
 .instruction-text {
-  /* M3 Body Large */
-  font-family: var(--md-sys-typescale-body-large-font);
-  font-size: var(--md-sys-typescale-body-large-size);
-  font-weight: var(--md-sys-typescale-body-large-weight);
-  line-height: var(--md-sys-typescale-body-large-line-height);
-  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  /* M3 Body Medium */
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
   margin: 0;
 }
@@ -59,8 +67,9 @@
   /* M3 Surface container */
   background-color: var(--md-sys-color-surface-container);
   border-radius: var(--md-sys-shape-corner-medium);
-  padding: 24px;
-  margin-top: 24px;
+  padding: 16px;
+  margin-top: 16px;
+  flex-shrink: 0;
   /* M3 Elevation level 1 */
   box-shadow: var(--md-sys-elevation-level1);
   /* M3 Expressive enter animation */
@@ -82,10 +91,10 @@
 .feedback-content {
   display: flex;
   justify-content: space-around;
-  gap: 24px;
-  padding: 20px;
+  gap: 16px;
+  padding: 12px;
   border-radius: var(--md-sys-shape-corner-small);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   /* Default M3 surface variant */
   background-color: var(--md-sys-color-surface-variant);
   color: var(--md-sys-color-on-surface-variant);
@@ -129,11 +138,11 @@
 
 .score-value,
 .distance-value {
-  /* M3 Headline Large */
-  font-family: var(--md-sys-typescale-headline-large-font);
-  font-size: var(--md-sys-typescale-headline-large-size);
+  /* M3 Headline Medium - More compact */
+  font-family: var(--md-sys-typescale-headline-medium-font);
+  font-size: var(--md-sys-typescale-headline-medium-size);
   font-weight: 700;
-  line-height: var(--md-sys-typescale-headline-large-line-height);
+  line-height: var(--md-sys-typescale-headline-medium-line-height);
 }
 
 .next-button {
@@ -142,14 +151,15 @@
   background-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border: none;
-  padding: 16px 32px;
+  padding: 12px 24px;
   min-height: 48px; /* M3 minimum touch target */
-  /* M3 Label Large */
+  /* M3 Label Large - Enhanced visibility */
   font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font-size: 16px;
+  font-weight: 700; /* Bold for better visibility */
   line-height: var(--md-sys-typescale-label-large-line-height);
-  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  letter-spacing: 0.5px; /* Increased tracking for better readability */
+  text-transform: uppercase;
   /* M3 Full shape (pill) */
   border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
@@ -194,63 +204,82 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .game-container {
-    padding: 16px;
+  .game-screen {
+    padding: 0 16px 16px;
+  }
+
+  .target-section {
+    margin: 16px 0 12px;
   }
 
   .target-title {
-    font-size: 20px;
+    font-size: var(--md-sys-typescale-title-medium-size);
   }
 
   .target-color-display {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
   }
 
   .instruction-text {
-    font-size: 14px;
+    font-size: var(--md-sys-typescale-body-small-size);
   }
 
   .round-feedback {
-    padding: 20px;
+    padding: 12px;
+    margin-top: 12px;
   }
 
   .feedback-content {
-    flex-direction: column;
-    gap: 16px;
-    padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-container {
-    padding: 12px;
-  }
-
-  .target-title {
-    font-size: 18px;
-  }
-
-  .target-color-display {
-    width: 120px;
-    height: 120px;
-  }
-
-  .instruction-text {
-    font-size: 13px;
-  }
-
-  .round-feedback {
-    padding: 16px;
+    gap: 12px;
+    padding: 10px;
   }
 
   .score-value,
   .distance-value {
-    font-size: 24px;
+    font-size: var(--md-sys-typescale-headline-small-size);
+  }
+}
+
+@media (max-width: 480px) {
+  .game-screen {
+    padding: 0 12px 12px;
+  }
+
+  .target-section {
+    margin: 12px 0 8px;
+  }
+
+  .target-title {
+    font-size: var(--md-sys-typescale-title-small-size);
+    margin-bottom: 8px;
+  }
+
+  .target-color-display {
+    width: 80px;
+    height: 80px;
+  }
+
+  .instruction-text {
+    font-size: var(--md-sys-typescale-body-small-size);
+  }
+
+  .round-feedback {
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .feedback-content {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  .score-value,
+  .distance-value {
+    font-size: var(--md-sys-typescale-title-large-size);
   }
 
   .next-button {
-    padding: 14px 24px;
-    font-size: 16px;
+    padding: 12px 20px;
   }
 }

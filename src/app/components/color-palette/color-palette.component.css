@@ -1,16 +1,22 @@
 .color-palette {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  padding: 16px;
-  max-width: 500px;
+  gap: 12px;
+  padding: 20px;
+  max-width: 600px;
   margin: 0 auto;
+  flex: 1;
+  align-content: center;
+  /* Fixed white background for color palette area */
+  background-color: #ffffff;
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .color-cell {
   aspect-ratio: 1;
   /* M3 Outline */
-  border: 1px solid var(--md-sys-color-outline);
+  border: 2px solid var(--md-sys-color-outline);
   /* M3 Medium shape */
   border-radius: var(--md-sys-shape-corner-medium);
   cursor: pointer;
@@ -19,36 +25,21 @@
     transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
     box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
     border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-  /* M3 Elevation level 1 */
-  box-shadow: var(--md-sys-elevation-level1);
+  /* M3 Elevation level 2 - More prominent */
+  box-shadow: var(--md-sys-elevation-level2);
   padding: 0;
-  min-height: 60px;
+  min-height: 70px;
   position: relative;
   overflow: hidden;
 }
 
-/* M3 State layer */
-.color-cell::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: var(--md-sys-color-on-surface);
-  opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.color-cell:hover:not(:disabled)::before {
-  opacity: var(--md-sys-state-hover-opacity);
-}
-
 .color-cell:hover:not(:disabled) {
   /* M3 Expressive scale */
-  transform: scale(1.08);
-  /* M3 Elevation level 2 */
-  box-shadow: var(--md-sys-elevation-level2);
+  transform: scale(1.1);
+  /* M3 Elevation level 3 - More prominent */
+  box-shadow: var(--md-sys-elevation-level3);
   border-color: var(--md-sys-color-primary);
+  border-width: 3px;
   z-index: 1;
 }
 
@@ -56,10 +47,6 @@
   /* M3 Focus outline */
   outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;
-}
-
-.color-cell:active:not(:disabled)::before {
-  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .color-cell:active:not(:disabled) {
@@ -78,24 +65,29 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .color-palette {
-    gap: 6px;
-    padding: 12px;
+    gap: 10px;
+    padding: 16px;
     max-width: 100%;
   }
 
   .color-cell {
-    min-height: 50px;
+    min-height: 60px;
   }
 }
 
 @media (max-width: 480px) {
   .color-palette {
-    gap: 4px;
-    padding: 8px;
+    gap: 8px;
+    padding: 12px;
   }
 
   .color-cell {
-    min-height: 40px;
-    border-radius: 4px;
+    min-height: 50px;
+    border-radius: var(--md-sys-shape-corner-small);
+    border-width: 1.5px;
+  }
+
+  .color-cell:hover:not(:disabled) {
+    border-width: 2px;
   }
 }

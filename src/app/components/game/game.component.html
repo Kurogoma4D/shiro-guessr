@@ -37,28 +37,16 @@
           (colorSelected)="onColorSelected($event)"
         ></app-color-palette>
 
-        <!-- Round Feedback -->
-        @if (isRoundCompleted()) {
-          <div class="round-feedback" role="alert" aria-live="polite">
-            <div class="feedback-content" [class.perfect]="currentRound()!.distance === 0"
-                                          [class.excellent]="currentRound()!.distance! > 0 && currentRound()!.distance! <= 5"
-                                          [class.good]="currentRound()!.distance! > 5 && currentRound()!.distance! <= 15">
-              <div class="feedback-score">
-                <span class="score-label">Score:</span>
-                <span class="score-value" aria-label="Score: {{ currentRound()!.score }} points">{{ currentRound()!.score }}</span>
-              </div>
-              <div class="feedback-distance">
-                <span class="distance-label">Distance:</span>
-                <span class="distance-value" aria-label="Distance: {{ currentRound()!.distance }}">{{ currentRound()!.distance }}</span>
-              </div>
-            </div>
-
-            @if (showNextButton()) {
-              <button class="next-button" (click)="onNextRound()" type="button" aria-label="Proceed to next round">
-                Next Round →
-              </button>
-            }
-          </div>
+        <!-- Round Result Dialog -->
+        @if (showDialog() && currentRound() && currentRound()!.selectedColor) {
+          <app-round-result-dialog
+            [targetColor]="currentRound()!.targetColor"
+            [selectedColor]="currentRound()!.selectedColor!"
+            [score]="currentRound()!.score!"
+            [distance]="currentRound()!.distance!"
+            [isLastRound]="isLastRound()"
+            (nextRound)="onDialogNextRound()"
+          ></app-round-result-dialog>
         }
       }
     </div>

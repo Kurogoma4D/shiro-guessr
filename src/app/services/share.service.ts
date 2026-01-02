@@ -19,7 +19,7 @@ export class ShareService {
       .map((round, index) => `R${index + 1}: ${round.score ?? 0}`)
       .join(' | ');
 
-    return `白Guessr\n${gameState.totalScore}/5000 (${scorePercentage}%)\n${roundBreakdown}\n#白Guessr`;
+    return `${gameState.totalScore}/5000 (${scorePercentage}%)\n${roundBreakdown}\n#白Guessr`;
   }
 
   /**

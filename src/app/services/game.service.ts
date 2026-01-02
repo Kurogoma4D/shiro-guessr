@@ -192,9 +192,10 @@ export class GameService {
         p.color.b === targetColor.b
     );
 
-    // If target is not in palette, replace the first color with target
+    // If target is not in palette, replace a random color with target
     if (!targetInPalette) {
-      paletteColors[0] = { color: targetColor };
+      const randomIndex = Math.floor(Math.random() * this.PALETTE_SIZE);
+      paletteColors[randomIndex] = { color: targetColor };
     }
 
     return {

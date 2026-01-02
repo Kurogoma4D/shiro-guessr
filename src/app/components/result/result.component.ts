@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState } from '../../models/game.model';
 import { RoundDetailComponent } from '../round-detail/round-detail.component';
@@ -30,11 +30,6 @@ export class ResultComponent {
    * Injected ShareService for sharing game results
    */
   private readonly shareService = inject(ShareService);
-
-  /**
-   * Signal to track if sharing is in progress
-   */
-  readonly isSharing = signal(false);
 
   /**
    * Maximum possible score (1000 points per round × 5 rounds)
@@ -91,29 +86,14 @@ export class ResultComponent {
   /**
    * Handles share to X (Twitter) button click
    */
-  async onShareToX(): Promise<void> {
-    this.isSharing.set(true);
-    try {
-      await this.shareService.shareResult(this.gameState());
-    } catch (error) {
-      console.error('Failed to share:', error);
-    } finally {
-      this.isSharing.set(false);
-    }
+  onShareToX(): void {
+    this.shareService.shareResult(this.gameState());
   }
 
   /**
    * Handles share to Bluesky button click
-   * Attempts to use Web Share API, falls back to Bluesky compose intent
    */
-  async onShareToBluesky(): Promise<void> {
-    this.isSharing.set(true);
-    try {
-      await this.shareService.shareToBluesky(this.gameState());
-    } catch (error) {
-      console.error('Failed to share to Bluesky:', error);
-    } finally {
-      this.isSharing.set(false);
-    }
+  onShareToBluesky(): void {
+    this.shareService.shareToBluesky(this.gameState());
   }
 }

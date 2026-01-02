@@ -1,0 +1,13 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "shiro-guessr",
+	"compatibility_date": "2026-01-02",
+	"pages_build_output_dir": "./dist/cloudflare",
+	"observability": {
+		"enabled": true
+	}
+}

@@ -47,4 +47,37 @@ export class ShareService {
     const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(shareText)}`;
     window.open(blueskyUrl, '_blank', 'width=550,height=600');
   }
+
+  /**
+   * Shares the game result using Web Share API
+   * Falls back to copying to clipboard if Web Share API is not available
+   * @param gameState The completed game state
+   */
+  async shareToOther(gameState: GameState): Promise<void> {
+    const text = this.generateShareText(gameState);
+    const url = window.location.href;
+    const shareText = `${text}\n\n${url}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: '白Guessr - Color Guessing Game',
+          text: shareText,
+          url: url,
+        });
+      } catch (error) {
+        // User cancelled the share or share failed
+        console.error('Share failed:', error);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(shareText);
+        alert('Result copied to clipboard!');
+      } catch (error) {
+        console.error('Copy to clipboard failed:', error);
+        alert('Sharing is not supported on this device');
+      }
+    }
+  }
 }

@@ -96,4 +96,11 @@ export class ResultComponent {
   onShareToBluesky(): void {
     this.shareService.shareToBluesky(this.gameState());
   }
+
+  /**
+   * Handles share to other platforms using Web Share API
+   */
+  onShareToOther(): void {
+    this.shareService.shareToOther(this.gameState());
+  }
 }

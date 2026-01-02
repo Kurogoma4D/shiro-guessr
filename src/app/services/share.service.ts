@@ -56,13 +56,12 @@ export class ShareService {
   async shareToOther(gameState: GameState): Promise<void> {
     const text = this.generateShareText(gameState);
     const url = window.location.href;
-    const shareText = `${text}\n\n${url}`;
 
     if (navigator.share) {
       try {
         await navigator.share({
           title: '白Guessr - Color Guessing Game',
-          text: shareText,
+          text: text,
           url: url,
         });
       } catch (error) {
@@ -72,7 +71,7 @@ export class ShareService {
     } else {
       // Fallback: Copy to clipboard
       try {
-        await navigator.clipboard.writeText(shareText);
+        await navigator.clipboard.writeText(text);
         alert('Result copied to clipboard!');
       } catch (error) {
         console.error('Copy to clipboard failed:', error);

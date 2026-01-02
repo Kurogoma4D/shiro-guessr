@@ -1,7 +1,7 @@
 <div class="score-board">
   <div class="score-board-content">
     <div class="title-section">
-      <h1 class="title">ShiroGuessr</h1>
+      <h1 class="title">白Guessr</h1>
     </div>
 
     <div class="info-section">
@@ -17,12 +17,14 @@
     </div>
   </div>
 
-  <div class="progress-bar-container" role="progressbar"
-       [attr.aria-valuenow]="currentRound()"
-       [attr.aria-valuemin]="0"
-       [attr.aria-valuemax]="totalRounds()"
-       aria-label="Game progress">
-    <div class="progress-bar-fill"
-         [style.width.%]="progressPercentage()"></div>
+  <div
+    class="progress-bar-container"
+    role="progressbar"
+    [attr.aria-valuenow]="currentRound()"
+    [attr.aria-valuemin]="0"
+    [attr.aria-valuemax]="totalRounds()"
+    aria-label="Game progress"
+  >
+    <div class="progress-bar-fill" [style.width.%]="progressPercentage()"></div>
   </div>
 </div>

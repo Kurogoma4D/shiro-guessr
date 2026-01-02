@@ -156,7 +156,7 @@ export class ShareService {
 
   /**
    * Attempts to use the Web Share API to share the result to X (Twitter)
-   * On mobile: shares with image using native share
+   * On mobile: shares with image using native share with title and URL
    * On desktop: downloads image and opens Twitter intent
    * @param gameState The completed game state
    */
@@ -170,7 +170,8 @@ export class ShareService {
 
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          text: text,
+          title: text,
+          url: window.location.href,
           files: [file],
         });
         return;
@@ -195,7 +196,7 @@ export class ShareService {
 
   /**
    * Attempts to use the Web Share API to share the result to Bluesky
-   * On mobile: shares with image using native share
+   * On mobile: shares with image using native share with title and URL
    * On desktop: opens Bluesky compose intent
    * @param gameState The completed game state
    */
@@ -209,7 +210,8 @@ export class ShareService {
 
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          text: text,
+          title: text,
+          url: window.location.href,
           files: [file],
         });
         return;

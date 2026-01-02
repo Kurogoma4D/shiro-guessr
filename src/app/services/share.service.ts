@@ -25,64 +25,70 @@ export class ShareService {
     canvas.width = 1200;
     canvas.height = 675;
 
-    // Background gradient
+    // White-based background with subtle gradient
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop(0, '#e3f2fd');
-    gradient.addColorStop(1, '#bbdefb');
+    gradient.addColorStop(0, '#FEFEFE');
+    gradient.addColorStop(1, '#F5F5F5');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Game title
-    ctx.fillStyle = '#1976d2';
+    // Game title with soft blue-gray color - centered higher
+    ctx.fillStyle = '#7C9BB5';
     ctx.font = 'bold 72px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('白Guessr', canvas.width / 2, 100);
+    ctx.fillText('白Guessr', canvas.width / 2, 120);
 
-    // Score section
-    ctx.fillStyle = '#424242';
-    ctx.font = 'bold 96px sans-serif';
-    ctx.fillText(`${gameState.totalScore}`, canvas.width / 2, 250);
+    // Score section with dark gray - centered
+    ctx.fillStyle = '#2C2C2C';
+    ctx.font = 'bold 120px sans-serif';
+    ctx.fillText(`${gameState.totalScore}`, canvas.width / 2, 280);
+
+    ctx.font = '40px sans-serif';
+    ctx.fillStyle = '#6B6B6B';
+    ctx.fillText('out of 5000 points', canvas.width / 2, 340);
+
+    // Performance evaluation - only percentage, centered
+    const scorePercentage = Math.round((gameState.totalScore / 5000) * 100);
 
     ctx.font = '36px sans-serif';
-    ctx.fillStyle = '#757575';
-    ctx.fillText('out of 5000 points', canvas.width / 2, 310);
+    ctx.fillStyle = '#7C9BB5';
+    ctx.fillText(`${scorePercentage}% Accuracy`, canvas.width / 2, 400);
 
-    // Performance evaluation
-    const scorePercentage = Math.round((gameState.totalScore / 5000) * 100);
-    let performanceEmoji = '💪';
-    let performanceText = 'Try Again!';
+    // Round breakdown with rounded container - centered lower
+    const containerX = 80;
+    const containerY = 480;
+    const containerWidth = canvas.width - 160;
+    const containerHeight = 90;
+    const cornerRadius = 20;
 
-    if (gameState.totalScore >= 4500) {
-      performanceEmoji = '🎉';
-      performanceText = 'Excellent!';
-    } else if (gameState.totalScore >= 3500) {
-      performanceEmoji = '👍';
-      performanceText = 'Good Job!';
-    }
+    // Draw rounded rectangle background
+    ctx.fillStyle = '#F9F9F9';
+    ctx.beginPath();
+    ctx.moveTo(containerX + cornerRadius, containerY);
+    ctx.lineTo(containerX + containerWidth - cornerRadius, containerY);
+    ctx.quadraticCurveTo(containerX + containerWidth, containerY, containerX + containerWidth, containerY + cornerRadius);
+    ctx.lineTo(containerX + containerWidth, containerY + containerHeight - cornerRadius);
+    ctx.quadraticCurveTo(containerX + containerWidth, containerY + containerHeight, containerX + containerWidth - cornerRadius, containerY + containerHeight);
+    ctx.lineTo(containerX + cornerRadius, containerY + containerHeight);
+    ctx.quadraticCurveTo(containerX, containerY + containerHeight, containerX, containerY + containerHeight - cornerRadius);
+    ctx.lineTo(containerX, containerY + cornerRadius);
+    ctx.quadraticCurveTo(containerX, containerY, containerX + cornerRadius, containerY);
+    ctx.closePath();
+    ctx.fill();
 
-    ctx.font = '64px sans-serif';
-    ctx.fillText(performanceEmoji, canvas.width / 2, 410);
-
-    ctx.font = 'bold 48px sans-serif';
-    ctx.fillStyle = '#1976d2';
-    ctx.fillText(performanceText, canvas.width / 2, 480);
-
-    ctx.font = '32px sans-serif';
-    ctx.fillStyle = '#757575';
-    ctx.fillText(`${scorePercentage}% Accuracy`, canvas.width / 2, 530);
-
-    // Round breakdown
-    ctx.font = 'bold 28px sans-serif';
-    ctx.fillStyle = '#424242';
+    // Round breakdown title
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillStyle = '#2C2C2C';
     ctx.textAlign = 'left';
-    ctx.fillText('Round Breakdown:', 100, 600);
+    ctx.fillText('Round Breakdown:', containerX + 20, containerY + 32);
 
-    let xPos = 100;
+    // Round scores
+    let xPos = containerX + 20;
     gameState.rounds.forEach((round, index) => {
       const roundScore = round.score ?? 0;
-      ctx.fillStyle = roundScore >= 900 ? '#4caf50' : roundScore >= 700 ? '#ff9800' : '#f44336';
-      ctx.font = 'bold 24px sans-serif';
-      ctx.fillText(`R${index + 1}: ${roundScore}`, xPos, 640);
+      ctx.fillStyle = roundScore >= 900 ? '#87C4A5' : roundScore >= 700 ? '#7C9BB5' : '#E89393';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText(`R${index + 1}: ${roundScore}`, xPos, containerY + 68);
       xPos += 200;
     });
 
@@ -120,6 +126,17 @@ export class ShareService {
   }
 
   /**
+   * Shares the game result to Bluesky
+   * Opens a new window with Bluesky's compose intent URL
+   * @param gameState The completed game state
+   */
+  shareToBlueskyIntent(gameState: GameState): void {
+    const text = this.generateShareText(gameState);
+    const blueskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
+    window.open(blueskyUrl, '_blank', 'width=550,height=600');
+  }
+
+  /**
    * Downloads the result image
    * @param gameState The completed game state
    */
@@ -138,7 +155,7 @@ export class ShareService {
   }
 
   /**
-   * Attempts to use the Web Share API to share the result
+   * Attempts to use the Web Share API to share the result to X (Twitter)
    * On mobile: shares with image using native share
    * On desktop: downloads image and opens Twitter intent
    * @param gameState The completed game state
@@ -174,5 +191,34 @@ export class ShareService {
       // Still open Twitter even if download fails
       this.shareToTwitter(gameState);
     }
+  }
+
+  /**
+   * Attempts to use the Web Share API to share the result to Bluesky
+   * On mobile: shares with image using native share
+   * On desktop: opens Bluesky compose intent
+   * @param gameState The completed game state
+   */
+  async shareToBluesky(gameState: GameState): Promise<void> {
+    const text = this.generateShareText(gameState);
+
+    try {
+      // Try to generate and share with image using Web Share API (mobile)
+      const blob = await this.generateResultImage(gameState);
+      const file = new File([blob], 'shiro-guessr-result.png', { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          text: text,
+          files: [file],
+        });
+        return;
+      }
+    } catch (error) {
+      console.log('Web Share API not available, using desktop fallback');
+    }
+
+    // Desktop fallback: open Bluesky compose intent
+    this.shareToBlueskyIntent(gameState);
   }
 }

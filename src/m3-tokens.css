@@ -3,50 +3,50 @@
 
 :root {
   /* ============================================
-     COLOR SYSTEM - Light Theme
+     COLOR SYSTEM - Light Theme (White-Based)
      ============================================ */
 
-  /* Primary Colors (Purple-Blue) */
-  --md-sys-color-primary: #6750A4;
+  /* Primary Colors (Soft Blue-Gray) */
+  --md-sys-color-primary: #7C9BB5;
   --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #EADDFF;
-  --md-sys-color-on-primary-container: #21005D;
+  --md-sys-color-primary-container: #E8F1F8;
+  --md-sys-color-on-primary-container: #2C3E50;
 
-  /* Secondary Colors */
-  --md-sys-color-secondary: #625B71;
+  /* Secondary Colors (Warm Gray) */
+  --md-sys-color-secondary: #9B9B9B;
   --md-sys-color-on-secondary: #FFFFFF;
-  --md-sys-color-secondary-container: #E8DEF8;
-  --md-sys-color-on-secondary-container: #1D192B;
+  --md-sys-color-secondary-container: #F2F2F2;
+  --md-sys-color-on-secondary-container: #3C3C3C;
 
-  /* Tertiary Colors (Success states) */
-  --md-sys-color-tertiary: #7D5260;
+  /* Tertiary Colors (Soft Green for success) */
+  --md-sys-color-tertiary: #87C4A5;
   --md-sys-color-on-tertiary: #FFFFFF;
-  --md-sys-color-tertiary-container: #FFD8E4;
-  --md-sys-color-on-tertiary-container: #31111D;
+  --md-sys-color-tertiary-container: #E8F6F0;
+  --md-sys-color-on-tertiary-container: #2E5D4A;
 
-  /* Error Colors */
-  --md-sys-color-error: #B3261E;
+  /* Error Colors (Soft Red) */
+  --md-sys-color-error: #E89393;
   --md-sys-color-on-error: #FFFFFF;
-  --md-sys-color-error-container: #F9DEDC;
-  --md-sys-color-on-error-container: #410E0B;
+  --md-sys-color-error-container: #FCF0F0;
+  --md-sys-color-on-error-container: #6B3030;
 
-  /* Surface Colors */
-  --md-sys-color-surface: #FEF7FF;
-  --md-sys-color-surface-dim: #DED8E1;
-  --md-sys-color-surface-bright: #FEF7FF;
+  /* Surface Colors (Ultra-light whites and off-whites) */
+  --md-sys-color-surface: #FEFEFE;
+  --md-sys-color-surface-dim: #F5F5F5;
+  --md-sys-color-surface-bright: #FFFFFF;
   --md-sys-color-surface-container-lowest: #FFFFFF;
-  --md-sys-color-surface-container-low: #F7F2FA;
-  --md-sys-color-surface-container: #F3EDF7;
-  --md-sys-color-surface-container-high: #ECE6F0;
-  --md-sys-color-surface-container-highest: #E6E0E9;
+  --md-sys-color-surface-container-low: #FCFCFC;
+  --md-sys-color-surface-container: #F9F9F9;
+  --md-sys-color-surface-container-high: #F5F5F5;
+  --md-sys-color-surface-container-highest: #F0F0F0;
 
-  --md-sys-color-on-surface: #1C1B1F;
-  --md-sys-color-on-surface-variant: #49454F;
-  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface: #2C2C2C;
+  --md-sys-color-on-surface-variant: #6B6B6B;
+  --md-sys-color-surface-variant: #F5F5F5;
 
-  /* Outline Colors */
-  --md-sys-color-outline: #79747E;
-  --md-sys-color-outline-variant: #CAC4D0;
+  /* Outline Colors (Very subtle) */
+  --md-sys-color-outline: #D4D4D4;
+  --md-sys-color-outline-variant: #E8E8E8;
 
   /* Inverse Colors */
   --md-sys-color-inverse-surface: #313033;
@@ -161,15 +161,15 @@
   --md-sys-elevation-level5: 0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
 
   /* ============================================
-     SHAPE SYSTEM
+     SHAPE SYSTEM (Enhanced for Softness)
      ============================================ */
 
   --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 8px;
-  --md-sys-shape-corner-medium: 12px;
-  --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-small: 8px;
+  --md-sys-shape-corner-small: 16px;
+  --md-sys-shape-corner-medium: 20px;
+  --md-sys-shape-corner-large: 24px;
+  --md-sys-shape-corner-extra-large: 32px;
   --md-sys-shape-corner-full: 9999px;
 
   /* ============================================

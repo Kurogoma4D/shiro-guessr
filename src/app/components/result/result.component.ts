@@ -103,14 +103,15 @@ export class ResultComponent {
   }
 
   /**
-   * Handles download image button click
+   * Handles share to Bluesky button click
+   * Attempts to use Web Share API, falls back to Bluesky compose intent
    */
-  async onDownloadImage(): Promise<void> {
+  async onShareToBluesky(): Promise<void> {
     this.isSharing.set(true);
     try {
-      await this.shareService.downloadResultImage(this.gameState());
+      await this.shareService.shareToBluesky(this.gameState());
     } catch (error) {
-      console.error('Failed to download image:', error);
+      console.error('Failed to share to Bluesky:', error);
     } finally {
       this.isSharing.set(false);
     }

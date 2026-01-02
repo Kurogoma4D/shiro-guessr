@@ -1,32 +1,32 @@
 .color-palette {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  padding: 20px;
+  gap: 16px;
+  padding: 24px;
   max-width: 600px;
   margin: 0 auto;
   flex: 1;
   align-content: center;
-  /* Fixed white background for color palette area */
-  background-color: #ffffff;
-  border-radius: var(--md-sys-shape-corner-large);
+  /* M3 Surface container with subtle elevation */
+  background-color: var(--md-sys-color-surface-container-lowest);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   box-shadow: var(--md-sys-elevation-level1);
 }
 
 .color-cell {
   aspect-ratio: 1;
-  /* M3 Outline */
-  border: 2px solid var(--md-sys-color-outline);
-  /* M3 Medium shape */
-  border-radius: var(--md-sys-shape-corner-medium);
+  /* M3 Outline - Very subtle */
+  border: 2px solid var(--md-sys-color-outline-variant);
+  /* M3 Large shape for softer appearance */
+  border-radius: var(--md-sys-shape-corner-large);
   cursor: pointer;
   /* M3 Standard transitions */
   transition:
     transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
     box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
     border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-  /* M3 Elevation level 2 - More prominent */
-  box-shadow: var(--md-sys-elevation-level2);
+  /* M3 Elevation level 1 - Subtle */
+  box-shadow: var(--md-sys-elevation-level1);
   padding: 0;
   min-height: 70px;
   position: relative;
@@ -35,11 +35,11 @@
 
 .color-cell:hover:not(:disabled) {
   /* M3 Expressive scale */
-  transform: scale(1.1);
-  /* M3 Elevation level 3 - More prominent */
-  box-shadow: var(--md-sys-elevation-level3);
+  transform: scale(1.08);
+  /* M3 Elevation level 2 - Subtle lift */
+  box-shadow: var(--md-sys-elevation-level2);
   border-color: var(--md-sys-color-primary);
-  border-width: 3px;
+  border-width: 2px;
   z-index: 1;
 }
 

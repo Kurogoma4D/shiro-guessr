@@ -116,61 +116,145 @@
   font-style: italic;
 }
 
+/* Action buttons container - M3 responsive layout */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Base button styles - M3 common properties */
+.share-button,
 .replay-button {
-  /* M3 Filled Button (Tertiary for distinct action) */
-  background-color: var(--md-sys-color-tertiary);
-  color: var(--md-sys-color-on-tertiary);
   border: none;
-  padding: 16px 48px;
+  padding: 16px 24px;
   min-height: 48px; /* M3 minimum touch target */
-  /* M3 Label Large - Enhanced visibility */
+  min-width: 48px;
+  /* M3 Label Large */
   font-family: var(--md-sys-typescale-label-large-font);
-  font-size: 16px;
-  font-weight: 700; /* Bold for better visibility */
+  font-size: 14px;
+  font-weight: 500;
   line-height: var(--md-sys-typescale-label-large-line-height);
-  letter-spacing: 0.5px; /* Increased tracking for better readability */
-  text-transform: uppercase;
+  letter-spacing: 0.1px;
   /* M3 Full shape (pill) */
   border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  display: inline-block;
-  /* M3 Elevation level 0 */
-  box-shadow: var(--md-sys-elevation-level0);
   /* M3 transitions */
   transition:
-    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
-    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
-    transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+    background-color 250ms cubic-bezier(0.2, 0.0, 0, 1.0),
+    box-shadow 250ms cubic-bezier(0.2, 0.0, 0, 1.0),
+    transform 250ms cubic-bezier(0.2, 0.0, 0, 1.0);
   position: relative;
   overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
-/* M3 State layer */
+/* M3 Filled Tonal Button - for secondary actions (Share & Download) */
+.share-button {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  /* M3 Elevation level 0 */
+  box-shadow: var(--md-sys-elevation-level0);
+}
+
+/* M3 Filled Button - for primary action (Play Again) */
+.replay-button {
+  background-color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+  padding: 16px 48px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  /* M3 Elevation level 0 */
+  box-shadow: var(--md-sys-elevation-level0);
+}
+
+/* Icon styling - M3 24dp standard icon size */
+.button-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* M3 State layers - hover */
+.share-button::before,
 .replay-button::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--md-sys-color-on-tertiary);
   opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  transition: opacity 250ms cubic-bezier(0.2, 0.0, 0, 1.0);
+  pointer-events: none;
 }
 
+.share-button::before {
+  background-color: var(--md-sys-color-on-secondary-container);
+}
+
+.replay-button::before {
+  background-color: var(--md-sys-color-on-tertiary);
+}
+
+/* Hover state - M3 8% opacity state layer */
+.share-button:hover::before,
 .replay-button:hover::before {
-  opacity: var(--md-sys-state-hover-opacity);
+  opacity: 0.08;
 }
 
+.share-button:hover,
 .replay-button:hover {
   /* M3 Elevation level 1 on hover */
   box-shadow: var(--md-sys-elevation-level1);
   transform: translateY(-1px);
 }
 
-.replay-button:active::before {
-  opacity: var(--md-sys-state-pressed-opacity);
+/* Focus state - M3 12% opacity state layer */
+.share-button:focus-visible::before,
+.replay-button:focus-visible::before {
+  opacity: 0.12;
 }
 
+.share-button:focus-visible,
+.replay-button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* Pressed state - M3 12% opacity state layer */
+.share-button:active::before,
+.replay-button:active::before {
+  opacity: 0.12;
+}
+
+.share-button:active,
 .replay-button:active {
   transform: translateY(0);
+}
+
+/* Disabled state - M3 38% opacity for container, 38% for content */
+.share-button:disabled,
+.replay-button:disabled {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.38);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.share-button:disabled::before,
+.replay-button:disabled::before {
+  display: none;
+}
+
+.share-button:disabled .button-icon,
+.replay-button:disabled .button-icon {
+  opacity: 0.38;
 }
 
 .rounds-breakdown {
@@ -191,7 +275,30 @@
   border-bottom: 3px solid var(--md-sys-color-primary);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - M3 Window Size Classes */
+
+/* Medium screens (600-840dp) - Tablet portrait */
+@media (max-width: 840px) {
+  .action-buttons {
+    gap: 16px;
+  }
+}
+
+/* Compact screens (<600dp) - Phone */
+@media (max-width: 600px) {
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .share-button,
+  .replay-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
   .result-container {
     padding: 20px;
@@ -215,10 +322,6 @@
 
   .final-score {
     font-size: 56px;
-  }
-
-  .replay-button {
-    padding: 14px 40px;
   }
 }
 
@@ -253,12 +356,6 @@
 
   .performance-message {
     font-size: 16px;
-  }
-
-  .replay-button {
-    padding: 12px 32px;
-    width: 100%;
-    text-align: center;
   }
 
   .breakdown-title {

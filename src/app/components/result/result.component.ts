@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameState } from '../../models/game.model';
 import { RoundDetailComponent } from '../round-detail/round-detail.component';
+import { ShareService } from '../../services/share.service';
 
 /**
  * Component for displaying final game results
@@ -24,6 +25,16 @@ export class ResultComponent {
    * Event emitted when user wants to replay the game
    */
   replay = output<void>();
+
+  /**
+   * Injected ShareService for sharing game results
+   */
+  private readonly shareService = inject(ShareService);
+
+  /**
+   * Signal to track if sharing is in progress
+   */
+  readonly isSharing = signal(false);
 
   /**
    * Maximum possible score (1000 points per round × 5 rounds)
@@ -75,5 +86,33 @@ export class ResultComponent {
    */
   onReplayClick(): void {
     this.replay.emit();
+  }
+
+  /**
+   * Handles share to X (Twitter) button click
+   */
+  async onShareToX(): Promise<void> {
+    this.isSharing.set(true);
+    try {
+      await this.shareService.shareResult(this.gameState());
+    } catch (error) {
+      console.error('Failed to share:', error);
+    } finally {
+      this.isSharing.set(false);
+    }
+  }
+
+  /**
+   * Handles download image button click
+   */
+  async onDownloadImage(): Promise<void> {
+    this.isSharing.set(true);
+    try {
+      await this.shareService.downloadResultImage(this.gameState());
+    } catch (error) {
+      console.error('Failed to download image:', error);
+    } finally {
+      this.isSharing.set(false);
+    }
   }
 }

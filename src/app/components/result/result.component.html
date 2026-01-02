@@ -10,9 +10,25 @@
       <div class="performance-message">{{ performanceMessage().message }}</div>
     </div>
 
-    <button class="replay-button" (click)="onReplayClick()" type="button" aria-label="Start a new game">
-      Play Again
-    </button>
+    <div class="action-buttons">
+      <button class="share-button share-x" (click)="onShareToX()" type="button" aria-label="Share result to X (Twitter)" [disabled]="isSharing()">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        Share to X
+      </button>
+      <button class="share-button download" (click)="onDownloadImage()" type="button" aria-label="Download result image" [disabled]="isSharing()">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download Image
+      </button>
+      <button class="replay-button" (click)="onReplayClick()" type="button" aria-label="Start a new game">
+        Play Again
+      </button>
+    </div>
   </div>
 
   <div class="rounds-breakdown">

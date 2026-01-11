@@ -61,8 +61,8 @@
 ## Phase 1: 基盤構築（マップ版）
 
 ### Task 1.1: データモデルの拡張
-- [ ] `src/app/models/game.model.ts` を開く
-- [ ] `MapCoordinate` インターフェースを追加
+- [x] `src/app/models/game.model.ts` を開く
+- [x] `MapCoordinate` インターフェースを追加
 
   ```typescript
   export interface MapCoordinate {
@@ -71,7 +71,7 @@
   }
   ```
 
-- [ ] `Pin` インターフェースを追加
+- [x] `Pin` インターフェースを追加
 
   ```typescript
   export interface Pin {
@@ -80,7 +80,7 @@
   }
   ```
 
-- [ ] `ViewportState` インターフェースを追加
+- [x] `ViewportState` インターフェースを追加
 
   ```typescript
   export interface ViewportState {
@@ -90,7 +90,7 @@
   }
   ```
 
-- [ ] `GradientMap` インターフェースを追加
+- [x] `GradientMap` インターフェースを追加
 
   ```typescript
   export interface GradientMap {
@@ -101,12 +101,12 @@
   }
   ```
 
-- [ ] 既存の `GameRound` インターフェースを拡張（`pin` と `timeRemaining` を追加）
-- [ ] 既存の `GameState` インターフェースを拡張（`timeLimit` を追加）
+- [x] 既存の `GameRound` インターフェースを拡張（`pin` と `timeRemaining` を追加）
+- [x] 既存の `GameState` インターフェースを拡張（`timeLimit` を追加）
 
 ### Task 1.2: ColorServiceの拡張
-- [ ] `src/app/services/color.service.ts` を開く
-- [ ] `interpolateColor` メソッドを追加
+- [x] `src/app/services/color.service.ts` を開く
+- [x] `interpolateColor` メソッドを追加
 
   ```typescript
   interpolateColor(color1: RGBColor, color2: RGBColor, t: number): RGBColor
@@ -116,38 +116,38 @@
   - 各RGB成分を線形補間
 
 ### Task 1.3: TimerServiceの作成
-- [ ] `src/app/services/timer.service.ts` を作成
-- [ ] Signalsを使用した状態管理
+- [x] `src/app/services/timer.service.ts` を作成
+- [x] Signalsを使用した状態管理
   - `timeRemaining: WritableSignal<number>`
   - `isRunning: WritableSignal<boolean>`
-- [ ] `startTimer(duration: number): void` メソッドを実装
+- [x] `startTimer(duration: number): void` メソッドを実装
   - RxJSの `interval` を使用して1秒ごとにカウントダウン
-- [ ] `stopTimer(): void` メソッドを実装
-- [ ] `resetTimer(): void` メソッドを実装
-- [ ] `onTimeout: Observable<void>` を実装
+- [x] `stopTimer(): void` メソッドを実装
+- [x] `resetTimer(): void` メソッドを実装
+- [x] `onTimeout: Observable<void>` を実装
   - タイムアウト時にイベントを発行
-- [ ] `timer.service.spec.ts` を作成してテストを追加
+- [x] `timer.service.spec.ts` を作成してテストを追加
 
 ---
 
 ## Phase 2: グラデーションマップ
 
 ### Task 2.1: GradientMapServiceの作成
-- [ ] `src/app/services/gradient-map.service.ts` を作成
-- [ ] ColorServiceを注入
-- [ ] `generateGradientMap(width: number, height: number): GradientMap` メソッドを実装
+- [x] `src/app/services/gradient-map.service.ts` を作成
+- [x] ColorServiceを注入
+- [x] `generateGradientMap(width: number, height: number): GradientMap` メソッドを実装
   - 4隅にランダムな白色（RGB 245-255）を生成
   - バイリニア補間でグラデーションを計算する関数を返す
-- [ ] `getColorAt(map: GradientMap, coordinate: MapCoordinate): RGBColor` メソッドを実装
+- [x] `getColorAt(map: GradientMap, coordinate: MapCoordinate): RGBColor` メソッドを実装
   - バイリニア補間アルゴリズム:
     1. 座標を正規化（0-1）
     2. 上辺と下辺をそれぞれ補間
     3. 上下の結果を縦方向に補間
-- [ ] `renderMapToCanvas(map: GradientMap, canvas: HTMLCanvasElement): void` メソッドを実装
+- [x] `renderMapToCanvas(map: GradientMap, canvas: HTMLCanvasElement): void` メソッドを実装
   - Canvas 2D contextを取得
   - 全ピクセルをループして色を計算
   - ImageDataを使用して一括描画
-- [ ] `gradient-map.service.spec.ts` を作成
+- [x] `gradient-map.service.spec.ts` を作成
   - グラデーション生成のテスト
   - バイリニア補間の正確性テスト
   - 色の範囲（245-255）が守られているかテスト

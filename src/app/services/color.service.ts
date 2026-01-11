@@ -79,6 +79,24 @@ export class ColorService {
   }
 
   /**
+   * Interpolates between two colors using linear interpolation
+   * @param color1 First color
+   * @param color2 Second color
+   * @param t Interpolation factor (0-1). 0 returns color1, 1 returns color2
+   * @returns Interpolated color
+   */
+  interpolateColor(color1: RGBColor, color2: RGBColor, t: number): RGBColor {
+    // Clamp t to [0, 1]
+    const clampedT = Math.max(0, Math.min(1, t));
+
+    return {
+      r: Math.round(color1.r + (color2.r - color1.r) * clampedT),
+      g: Math.round(color1.g + (color2.g - color1.g) * clampedT),
+      b: Math.round(color1.b + (color2.b - color1.b) * clampedT),
+    };
+  }
+
+  /**
    * Generates a random integer between min and max (inclusive)
    * @param min Minimum value (inclusive)
    * @param max Maximum value (inclusive)

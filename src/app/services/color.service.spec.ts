@@ -225,4 +225,90 @@ describe('ColorService', () => {
       expect(cssString).toMatch(/^rgb\(\d+, \d+, \d+\)$/);
     });
   });
+
+  describe('interpolateColor', () => {
+    it('should return color1 when t is 0', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 255, g: 255, b: 255 };
+
+      const result = service.interpolateColor(color1, color2, 0);
+      expect(result).toEqual(color1);
+    });
+
+    it('should return color2 when t is 1', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 255, g: 255, b: 255 };
+
+      const result = service.interpolateColor(color1, color2, 1);
+      expect(result).toEqual(color2);
+    });
+
+    it('should return midpoint color when t is 0.5', () => {
+      const color1: RGBColor = { r: 240, g: 240, b: 240 };
+      const color2: RGBColor = { r: 250, g: 250, b: 250 };
+
+      const result = service.interpolateColor(color1, color2, 0.5);
+      expect(result).toEqual({ r: 245, g: 245, b: 245 });
+    });
+
+    it('should interpolate correctly with different values per channel', () => {
+      const color1: RGBColor = { r: 245, g: 250, b: 255 };
+      const color2: RGBColor = { r: 255, g: 245, b: 245 };
+
+      const result = service.interpolateColor(color1, color2, 0.5);
+      expect(result).toEqual({ r: 250, g: 248, b: 250 });
+    });
+
+    it('should clamp t to 0 when negative', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 255, g: 255, b: 255 };
+
+      const result = service.interpolateColor(color1, color2, -0.5);
+      expect(result).toEqual(color1);
+    });
+
+    it('should clamp t to 1 when greater than 1', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 255, g: 255, b: 255 };
+
+      const result = service.interpolateColor(color1, color2, 1.5);
+      expect(result).toEqual(color2);
+    });
+
+    it('should round interpolated values to integers', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 246, g: 246, b: 246 };
+
+      const result = service.interpolateColor(color1, color2, 0.3);
+      // 245 + (246 - 245) * 0.3 = 245.3, should round to 245
+      expect(result.r).toBe(245);
+      expect(result.g).toBe(245);
+      expect(result.b).toBe(245);
+      expect(Number.isInteger(result.r)).toBe(true);
+      expect(Number.isInteger(result.g)).toBe(true);
+      expect(Number.isInteger(result.b)).toBe(true);
+    });
+
+    it('should work with identical colors', () => {
+      const color: RGBColor = { r: 250, g: 250, b: 250 };
+
+      const result = service.interpolateColor(color, color, 0.5);
+      expect(result).toEqual(color);
+    });
+
+    it('should produce smooth gradient at multiple steps', () => {
+      const color1: RGBColor = { r: 245, g: 245, b: 245 };
+      const color2: RGBColor = { r: 255, g: 255, b: 255 };
+
+      const steps = [0, 0.25, 0.5, 0.75, 1];
+      const results = steps.map(t => service.interpolateColor(color1, color2, t));
+
+      // Check that values are monotonically increasing
+      for (let i = 1; i < results.length; i++) {
+        expect(results[i].r).toBeGreaterThanOrEqual(results[i - 1].r);
+        expect(results[i].g).toBeGreaterThanOrEqual(results[i - 1].g);
+        expect(results[i].b).toBeGreaterThanOrEqual(results[i - 1].b);
+      }
+    });
+  });
 });

@@ -8,6 +8,50 @@ export interface RGBColor {
 }
 
 /**
+ * Map coordinate with normalized values (0-1)
+ */
+export interface MapCoordinate {
+  /** Normalized x coordinate (0-1) */
+  x: number;
+  /** Normalized y coordinate (0-1) */
+  y: number;
+}
+
+/**
+ * Pin placed on the gradient map
+ */
+export interface Pin {
+  /** The coordinate where the pin is placed */
+  coordinate: MapCoordinate;
+  /** The color at the pin location */
+  color: RGBColor;
+}
+
+/**
+ * Viewport state for map navigation
+ */
+export interface ViewportState {
+  /** Center point of the viewport */
+  center: MapCoordinate;
+  /** Zoom level (0.5 - 4.0) */
+  zoom: number;
+  /** Offset from the center in pixels */
+  offset: { x: number; y: number };
+}
+
+/**
+ * Gradient map with bilinear interpolation
+ */
+export interface GradientMap {
+  /** Width of the map in pixels */
+  width: number;
+  /** Height of the map in pixels */
+  height: number;
+  /** Colors at the four corners: [topLeft, topRight, bottomLeft, bottomRight] */
+  cornerColors: [RGBColor, RGBColor, RGBColor, RGBColor];
+}
+
+/**
  * A single round in the game
  */
 export interface GameRound {
@@ -23,6 +67,10 @@ export interface GameRound {
   score: number | null;
   /** Available colors in the palette for this round */
   paletteColors: PaletteColor[];
+  /** Pin placed on the map (for map mode) */
+  pin?: Pin;
+  /** Time remaining when the guess was made (for map mode) */
+  timeRemaining?: number;
 }
 
 /**
@@ -37,6 +85,8 @@ export interface GameState {
   isCompleted: boolean;
   /** Total score across all rounds */
   totalScore: number;
+  /** Time limit per round in seconds (for map mode) */
+  timeLimit?: number;
 }
 
 /**

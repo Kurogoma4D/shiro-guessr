@@ -23,10 +23,10 @@ export class MapGameService {
   private readonly TIME_LIMIT = 60;
 
   /**
-   * Map dimensions
+   * Map dimensions (each pixel will be rendered as 16x16px)
    */
-  private readonly MAP_WIDTH = 800;
-  private readonly MAP_HEIGHT = 600;
+  private readonly MAP_WIDTH = 50;
+  private readonly MAP_HEIGHT = 50;
 
   /**
    * Injected services

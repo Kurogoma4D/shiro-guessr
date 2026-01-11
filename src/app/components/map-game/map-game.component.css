@@ -1,8 +1,9 @@
+/* M3 Surface background */
 .map-game {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #f9fafb;
+  background-color: var(--md-sys-color-surface);
 }
 
 .game-content {
@@ -10,6 +11,9 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .map-container {
@@ -43,14 +47,15 @@
   }
 }
 
+/* M3 Surface container with elevation */
 .result-card {
-  background: white;
-  border-radius: 16px;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   padding: 2.5rem;
-  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--md-sys-elevation-level3);
   max-width: 500px;
   width: 90%;
-  animation: slideUp 0.4s ease;
+  animation: slideUp var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 @keyframes slideUp {
@@ -64,11 +69,14 @@
   }
 }
 
+/* M3 Headline Large - Enhanced weight */
 .result-title {
   margin: 0 0 1.5rem 0;
-  font-size: 1.875rem;
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
   font-weight: 700;
-  color: #111827;
+  line-height: var(--md-sys-typescale-headline-large-line-height);
+  color: var(--md-sys-color-on-surface);
   text-align: center;
 }
 
@@ -86,47 +94,80 @@
   gap: 0.5rem;
 }
 
+/* M3 Label Large - Enhanced weight */
 .stat-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #6b7280;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 700;
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  color: var(--md-sys-color-on-surface-variant);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
+/* M3 Display Small - Enhanced weight */
 .stat-value {
-  font-size: 2rem;
+  font-family: var(--md-sys-typescale-display-small-font);
+  font-size: var(--md-sys-typescale-display-small-size);
   font-weight: 700;
-  color: #111827;
+  line-height: var(--md-sys-typescale-display-small-line-height);
+  color: var(--md-sys-color-on-surface);
 }
 
 .stat-value.score-highlight {
-  color: #3b82f6;
+  font-weight: 800;
+  color: var(--md-sys-color-primary);
 }
 
+/* M3 Filled Button (Primary) */
 .next-button {
   width: 100%;
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  padding: 12px 24px;
+  min-height: 48px; /* M3 minimum touch target */
+  /* M3 Label Large */
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  color: var(--md-sys-color-on-primary);
+  background-color: var(--md-sys-color-primary);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+  transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+  box-shadow: var(--md-sys-elevation-level0);
+  position: relative;
+  overflow: hidden;
+}
+
+/* M3 State layer */
+.next-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-primary);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.next-button:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
 }
 
 .next-button:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: var(--md-sys-elevation-level1);
+  transform: translateY(-1px);
+}
+
+.next-button:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .next-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
 /* Responsive design */
@@ -184,8 +225,8 @@
   }
 }
 
-/* Focus styles for accessibility */
+/* M3 Focus indicator */
 .next-button:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }

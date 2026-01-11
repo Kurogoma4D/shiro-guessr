@@ -24,10 +24,10 @@
 }
 
 .target-title {
-  /* M3 Title Large */
+  /* M3 Title Large - Enhanced weight */
   font-family: var(--md-sys-typescale-title-large-font);
   font-size: var(--md-sys-typescale-title-large-size);
-  font-weight: var(--md-sys-typescale-title-large-weight);
+  font-weight: 700;
   line-height: var(--md-sys-typescale-title-large-line-height);
   letter-spacing: var(--md-sys-typescale-title-large-tracking);
   color: var(--md-sys-color-on-surface);
@@ -53,10 +53,10 @@
 }
 
 .instruction-text {
-  /* M3 Body Medium */
+  /* M3 Body Medium - Enhanced weight */
   font-family: var(--md-sys-typescale-body-medium-font);
   font-size: var(--md-sys-typescale-body-medium-size);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
+  font-weight: 600;
   line-height: var(--md-sys-typescale-body-medium-line-height);
   letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
@@ -126,22 +126,21 @@
 
 .score-label,
 .distance-label {
-  /* M3 Label Large */
+  /* M3 Label Large - Enhanced weight */
   font-family: var(--md-sys-typescale-label-large-font);
   font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
+  font-weight: 700;
   line-height: var(--md-sys-typescale-label-large-line-height);
   letter-spacing: var(--md-sys-typescale-label-large-tracking);
   text-transform: uppercase;
-  opacity: 0.8;
 }
 
 .score-value,
 .distance-value {
-  /* M3 Headline Medium - More compact */
+  /* M3 Headline Medium - Enhanced weight */
   font-family: var(--md-sys-typescale-headline-medium-font);
   font-size: var(--md-sys-typescale-headline-medium-size);
-  font-weight: 700;
+  font-weight: 800;
   line-height: var(--md-sys-typescale-headline-medium-line-height);
 }
 

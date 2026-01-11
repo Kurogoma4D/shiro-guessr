@@ -1,68 +1,108 @@
+/* M3 Surface container with top border */
 .game-controls {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
-  background: white;
-  border-top: 2px solid #e5e7eb;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  gap: 16px;
+  padding: 24px;
+  background-color: var(--md-sys-color-surface-container);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
+/* M3 Filled Button (Primary) */
 .guess-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 2.5rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  gap: 12px;
+  padding: 12px 32px;
+  min-height: 48px; /* M3 minimum touch target */
+  /* M3 Label Large */
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  color: var(--md-sys-color-on-primary);
+  background-color: var(--md-sys-color-primary);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+  transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-emphasized);
+  box-shadow: var(--md-sys-elevation-level0);
   min-width: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* M3 State layer */
+.guess-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-on-primary);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.guess-button:hover:not(:disabled)::before {
+  opacity: var(--md-sys-state-hover-opacity);
 }
 
 .guess-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+  box-shadow: var(--md-sys-elevation-level1);
+  transform: translateY(-1px);
+}
+
+.guess-button:active:not(:disabled)::before {
+  opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .guess-button:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
+/* M3 Disabled state */
 .guess-button:disabled,
 .guess-button.disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface);
+  opacity: 0.38; /* M3 disabled opacity */
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
+.guess-button:disabled::before,
+.guess-button.disabled::before {
+  display: none;
+}
+
 .button-icon {
   flex-shrink: 0;
+  position: relative; /* Above the state layer */
+  z-index: 1;
 }
 
 .button-text {
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
+  position: relative; /* Above the state layer */
+  z-index: 1;
 }
 
+/* M3 Body Small - Enhanced weight */
 .hint-text {
   margin: 0;
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: 600;
+  line-height: var(--md-sys-typescale-body-small-line-height);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-on-surface-variant);
   text-align: center;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 @keyframes fadeIn {
@@ -113,8 +153,8 @@
   }
 }
 
-/* Focus styles for accessibility */
+/* M3 Focus indicator */
 .guess-button:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }

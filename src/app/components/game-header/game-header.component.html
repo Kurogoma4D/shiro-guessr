@@ -1,21 +1,37 @@
 <div class="game-header">
-  <div class="target-section">
-    <h2 class="section-title">Target Color</h2>
-    <div class="color-display" [style.background-color]="getTargetColorStyle()" [attr.aria-label]="'Target color RGB ' + targetColor().r + ' ' + targetColor().g + ' ' + targetColor().b"></div>
-    <div class="rgb-values">
-      <span class="rgb-label">RGB:</span>
-      <span class="rgb-value">{{ targetColor().r }}, {{ targetColor().g }}, {{ targetColor().b }}</span>
-    </div>
-  </div>
-
   <div class="timer-section">
-    <div class="timer" [class.time-low]="isTimeLow()" [attr.aria-live]="isTimeLow() ? 'assertive' : 'polite'">
-      <svg class="timer-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div
+      class="timer"
+      [class.time-low]="isTimeLow()"
+      [attr.aria-live]="isTimeLow() ? 'assertive' : 'polite'"
+    >
+      <svg
+        class="timer-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
       <span class="timer-value">{{ formatTime() }}</span>
     </div>
+  </div>
+
+  <div class="target-section">
+    <h2 class="section-title">Target Color</h2>
+    <div
+      class="color-display"
+      [style.background-color]="getTargetColorStyle()"
+      [attr.aria-label]="
+        'Target color RGB ' + targetColor().r + ' ' + targetColor().g + ' ' + targetColor().b
+      "
+    ></div>
   </div>
 
   <div class="info-section">

@@ -8,30 +8,14 @@
 
 .score-board-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 12px 20px;
-  gap: 16px;
-}
-
-.title-section {
-  flex-shrink: 0;
-}
-
-.title {
-  margin: 0;
-  /* M3 Title Large - More compact */
-  font-family: var(--md-sys-typescale-title-large-font);
-  font-size: var(--md-sys-typescale-title-large-size);
-  font-weight: var(--md-sys-typescale-title-large-weight);
-  line-height: var(--md-sys-typescale-title-large-line-height);
-  letter-spacing: var(--md-sys-typescale-title-large-tracking);
-  color: var(--md-sys-color-on-surface);
+  padding: 16px 20px;
 }
 
 .info-section {
   display: flex;
-  gap: 24px;
+  gap: 48px;
   align-items: center;
 }
 
@@ -43,10 +27,10 @@
 }
 
 .info-label {
-  /* M3 Label Small - Subtle */
+  /* M3 Label Small - Enhanced weight */
   font-family: var(--md-sys-typescale-label-small-font);
   font-size: var(--md-sys-typescale-label-small-size);
-  font-weight: var(--md-sys-typescale-label-small-weight);
+  font-weight: 700;
   line-height: var(--md-sys-typescale-label-small-line-height);
   letter-spacing: var(--md-sys-typescale-label-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
@@ -54,19 +38,19 @@
 }
 
 .info-value {
-  /* M3 Title Medium - Compact but readable */
+  /* M3 Title Medium - Enhanced weight */
   font-family: var(--md-sys-typescale-title-medium-font);
   font-size: var(--md-sys-typescale-title-medium-size);
-  font-weight: var(--md-sys-typescale-title-medium-weight);
+  font-weight: 700;
   line-height: var(--md-sys-typescale-title-medium-line-height);
   color: var(--md-sys-color-on-surface);
 }
 
 .info-value.score-highlight {
-  /* M3 Title Large - Emphasize score */
+  /* M3 Title Large - Enhanced weight and emphasis */
   font-family: var(--md-sys-typescale-title-large-font);
   font-size: var(--md-sys-typescale-title-large-size);
-  font-weight: 700;
+  font-weight: 800;
   color: var(--md-sys-color-primary);
 }
 

@@ -31,6 +31,18 @@ export class ColorService {
   }
 
   /**
+   * Generates a random color with RGB values between 0-255
+   * @returns A random RGBColor
+   */
+  generateRandomColor(): RGBColor {
+    return {
+      r: this.randomInRange(0, 255),
+      g: this.randomInRange(0, 255),
+      b: this.randomInRange(0, 255),
+    };
+  }
+
+  /**
    * Generates all possible white colors (RGB 245-255)
    * Total: 11 × 11 × 11 = 1,331 colors
    * @returns Array of all possible white colors

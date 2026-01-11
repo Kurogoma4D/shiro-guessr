@@ -18,7 +18,7 @@ export class GradientMapService {
    * @returns Generated gradient map
    */
   generateGradientMap(width: number, height: number): GradientMap {
-    // Generate random white colors for each corner
+    // Generate random white colors (245-255) for each corner
     const topLeft = this.colorService.generateRandomWhiteColor();
     const topRight = this.colorService.generateRandomWhiteColor();
     const bottomLeft = this.colorService.generateRandomWhiteColor();

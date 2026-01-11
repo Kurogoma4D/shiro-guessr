@@ -1,0 +1,54 @@
+<div class="map-game">
+  <app-mode-switcher [currentMode]="'map'" />
+
+  @if (gameState().isCompleted) {
+    <app-result [gameState]="gameState()" (replay)="onReplay()" />
+  } @else if (currentRound()) {
+    <div class="game-content">
+      <app-game-header
+        [targetColor]="currentRound()!.targetColor"
+        [currentRound]="currentRound()!.roundNumber"
+        [totalRounds]="totalRounds()"
+        [timeRemaining]="timeRemaining()"
+        [currentScore]="gameState().totalScore" />
+
+      <div class="map-container">
+        <app-gradient-map
+          [gradientMap]="currentGradientMap()"
+          [pin]="currentPin()"
+          [disabled]="isProcessing()"
+          (pinPlaced)="onPinPlaced($event)" />
+      </div>
+
+      @if (isProcessing()) {
+        <div class="round-result-overlay">
+          <div class="result-card">
+            <h2 class="result-title">Round {{ currentRound()!.roundNumber }} Complete!</h2>
+            <div class="result-stats">
+              <div class="stat">
+                <span class="stat-label">Distance</span>
+                <span class="stat-value">{{ currentRound()!.distance }}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Score</span>
+                <span class="stat-value score-highlight">{{ currentRound()!.score }}</span>
+              </div>
+            </div>
+            <button type="button" class="next-button" (click)="onNextRound()">
+              @if (currentRound()!.roundNumber < totalRounds()) {
+                Next Round
+              } @else {
+                View Results
+              }
+            </button>
+          </div>
+        </div>
+      } @else {
+        <app-game-controls
+          [hasPin]="currentPin() !== null"
+          [disabled]="isProcessing()"
+          (guess)="onGuess()" />
+      }
+    </div>
+  }
+</div>

@@ -46,6 +46,38 @@ describe('ColorService', () => {
     });
   });
 
+  describe('generateRandomColor', () => {
+    it('should generate a color with RGB values between 0-255', () => {
+      const color = service.generateRandomColor();
+
+      expect(color.r).toBeGreaterThanOrEqual(0);
+      expect(color.r).toBeLessThanOrEqual(255);
+      expect(color.g).toBeGreaterThanOrEqual(0);
+      expect(color.g).toBeLessThanOrEqual(255);
+      expect(color.b).toBeGreaterThanOrEqual(0);
+      expect(color.b).toBeLessThanOrEqual(255);
+    });
+
+    it('should generate different colors on multiple calls', () => {
+      const colors = new Set<string>();
+      // Generate 100 random colors and check we get some variety
+      for (let i = 0; i < 100; i++) {
+        const color = service.generateRandomColor();
+        colors.add(`${color.r},${color.g},${color.b}`);
+      }
+      // With 100 random samples from 16.7M possibilities, we should get more than 1 unique value
+      expect(colors.size).toBeGreaterThan(1);
+    });
+
+    it('should generate valid RGB values', () => {
+      const color = service.generateRandomColor();
+
+      expect(Number.isInteger(color.r)).toBe(true);
+      expect(Number.isInteger(color.g)).toBe(true);
+      expect(Number.isInteger(color.b)).toBe(true);
+    });
+  });
+
   describe('generateAllWhiteColors', () => {
     it('should generate exactly 1,331 colors (11 × 11 × 11)', () => {
       const colors = service.generateAllWhiteColors();

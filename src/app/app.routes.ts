@@ -13,6 +13,7 @@ export const routes: Routes = [
   },
   {
     path: 'map',
-    redirectTo: '/classic',
+    loadComponent: () =>
+      import('./components/map-game/map-game.component').then((m) => m.MapGameComponent),
   },
 ];

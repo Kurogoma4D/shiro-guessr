@@ -173,7 +173,7 @@ export class GradientMapComponent implements AfterViewInit {
 
     // Set canvas internal dimensions to match display size
     canvas.width = rect.width;
-    canvas.height = rect.height;
+    canvas.height = rect.height * 1.1; // 10% taller for better visibility
   }
 
 

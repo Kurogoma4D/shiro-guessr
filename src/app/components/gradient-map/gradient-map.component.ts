@@ -9,6 +9,7 @@ import {
   inject,
   signal,
   PLATFORM_ID,
+  untracked,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { GradientMap, Pin, MapCoordinate, ViewportState } from '../../models/game.model';
@@ -76,15 +77,37 @@ export class GradientMapComponent implements AfterViewInit {
    */
   private readonly PIXEL_SIZE = 16;
 
+  /**
+   * Reference to the last rendered map to detect actual changes
+   */
+  private lastRenderedMap: GradientMap | null = null;
+
   constructor() {
     // Effect to render the map when it changes
     effect(() => {
       const map = this.gradientMap();
+      console.log('Map effect triggered, map:', map ? 'exists' : 'null');
       if (map && this.canvasRef) {
-        // Clear offscreen canvas when map changes to force re-render
-        this.offscreenCanvas = null;
-        // Reset viewport when new map is loaded
-        this.initializeViewport();
+        // Check if this is actually a new map
+        const isNewMap = this.lastRenderedMap !== map;
+        console.log('Is new map:', isNewMap);
+
+        if (isNewMap) {
+          // Clear offscreen canvas when map changes to force re-render
+          this.offscreenCanvas = null;
+
+          // Reset viewport when new map is loaded (only if canvas is ready)
+          if (isPlatformBrowser(this.platformId) &&
+              this.canvasRef.nativeElement.width > 0 &&
+              this.canvasRef.nativeElement.height > 0) {
+            console.log('Calling initializeViewport from map effect');
+            this.initializeViewport();
+          }
+
+          // Update last rendered map reference
+          this.lastRenderedMap = map;
+        }
+
         this.renderMap(map);
       }
     });
@@ -93,20 +116,29 @@ export class GradientMapComponent implements AfterViewInit {
     effect(() => {
       // Subscribe to viewport changes
       this.navigationService.viewportState();
-      const map = this.gradientMap();
-      if (map && this.canvasRef) {
-        this.renderMap(map);
-      }
+
+      // Use untracked to read gradientMap without subscribing to it
+      // This prevents circular dependency between viewport and map changes
+      untracked(() => {
+        const map = this.gradientMap();
+        if (map && this.canvasRef && this.canvasRef.nativeElement.width > 0) {
+          this.renderMap(map);
+        }
+      });
     });
 
     // Effect to re-render when pin changes
     effect(() => {
       // Subscribe to pin changes
       this.pin();
-      const map = this.gradientMap();
-      if (map && this.canvasRef) {
-        this.renderMap(map);
-      }
+
+      // Use untracked to read gradientMap without subscribing to it
+      untracked(() => {
+        const map = this.gradientMap();
+        if (map && this.canvasRef) {
+          this.renderMap(map);
+        }
+      });
     });
   }
 
@@ -116,7 +148,7 @@ export class GradientMapComponent implements AfterViewInit {
       return;
     }
 
-    // Use setTimeout to ensure canvas is fully rendered
+    // Use setTimeout to ensure canvas is fully rendered and sized
     setTimeout(() => {
       // Set canvas size to match its displayed size
       this.resizeCanvas();
@@ -129,7 +161,7 @@ export class GradientMapComponent implements AfterViewInit {
       if (map) {
         this.renderMap(map);
       }
-    }, 0);
+    }, 100);
 
     // Add resize listener to update canvas size
     if (typeof window !== 'undefined') {
@@ -153,7 +185,13 @@ export class GradientMapComponent implements AfterViewInit {
     }
 
     const canvas = this.canvasRef.nativeElement;
-    const rect = canvas.getBoundingClientRect();
+    const parent = canvas.parentElement;
+
+    if (!parent) {
+      return;
+    }
+
+    const rect = parent.getBoundingClientRect();
 
     // Set canvas internal dimensions to match display size
     canvas.width = rect.width;
@@ -169,25 +207,31 @@ export class GradientMapComponent implements AfterViewInit {
     }
 
     const canvas = this.canvasRef.nativeElement;
+
+    // Early return if canvas is not ready
+    if (canvas.width === 0 || canvas.height === 0) {
+      return;
+    }
+
     const dimensions = this.getDisplayDimensions();
-    if (!dimensions) return;
+    if (!dimensions) {
+      return;
+    }
 
     const displayWidth = dimensions.width;
     const displayHeight = dimensions.height;
 
-    // Calculate zoom to fit map in canvas (with some padding)
+    // Calculate zoom to fit map in canvas (full width)
     const zoomX = canvas.width / displayWidth;
     const zoomY = canvas.height / displayHeight;
-    const fitZoom = Math.min(zoomX, zoomY) * 0.9; // 0.9 for padding
+    const fitZoom = Math.min(zoomX, zoomY); // Fill entire screen width/height
 
-    // Set initial zoom if map is larger than canvas
-    if (fitZoom < 1) {
-      this.navigationService.viewportState.set({
-        center: { x: 0.5, y: 0.5 },
-        zoom: fitZoom,
-        offset: { x: 0, y: 0 },
-      });
-    }
+    // Always set viewport to fit map to screen
+    this.navigationService.viewportState.set({
+      center: { x: 0.5, y: 0.5 },
+      zoom: fitZoom,
+      offset: { x: 0, y: 0 },
+    });
   }
 
   /**
@@ -284,11 +328,26 @@ export class GradientMapComponent implements AfterViewInit {
    * Zooms in
    */
   zoomIn(): void {
+    console.log('zoomIn called, disabled:', this.disabled());
     if (this.disabled()) {
       return;
     }
 
+    const beforeZoom = this.navigationService.viewportState().zoom;
+    console.log('Before zoom:', beforeZoom);
     this.navigationService.zoom(0.2);
+
+    // Check immediately after
+    setTimeout(() => {
+      const afterZoom = this.navigationService.viewportState().zoom;
+      console.log('After zoom (immediate):', afterZoom);
+    }, 0);
+
+    // Check after a delay
+    setTimeout(() => {
+      const afterZoom = this.navigationService.viewportState().zoom;
+      console.log('After zoom (delayed 100ms):', afterZoom);
+    }, 100);
   }
 
   /**
@@ -342,28 +401,15 @@ export class GradientMapComponent implements AfterViewInit {
     const centerX = Math.max(0, (canvas.width - scaledWidth) / 2);
     const centerY = Math.max(0, (canvas.height - scaledHeight) / 2);
 
-    console.log('placePin debug:', {
-      screenX, screenY,
-      canvasWidth: canvas.width, canvasHeight: canvas.height,
-      displayWidth, displayHeight,
-      scaledWidth, scaledHeight,
-      centerX, centerY,
-      viewport
-    });
-
     // Inverse transformation: screen -> map coordinates
     // screenX = (mapX * zoom) + (centerX + offset.x)
     // mapX = (screenX - centerX - offset.x) / zoom
     const mapX = (screenX - centerX - viewport.offset.x) / viewport.zoom;
     const mapY = (screenY - centerY - viewport.offset.y) / viewport.zoom;
 
-    console.log('mapX, mapY:', mapX, mapY);
-
     // Normalize to 0-1 range
     const normalizedX = mapX / displayWidth;
     const normalizedY = mapY / displayHeight;
-
-    console.log('normalized:', normalizedX, normalizedY);
 
     // Clamp to valid range
     const coordinate: MapCoordinate = {

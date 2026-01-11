@@ -1,14 +1,16 @@
 <div class="gradient-map-container">
-  <canvas
-    #canvas
-    class="gradient-map-canvas"
-    [class.disabled]="disabled()"
-    (pointerdown)="onPointerDown($event)"
-    (pointermove)="onPointerMove($event)"
-    (pointerup)="onPointerUp($event)"
-    (wheel)="onWheel($event)"
-    [attr.aria-label]="disabled() ? 'Map view (interaction disabled)' : 'Interactive gradient map. Click to place a pin, drag to pan, scroll to zoom'">
-  </canvas>
+  <div class="canvas-wrapper">
+    <canvas
+      #canvas
+      class="gradient-map-canvas"
+      [class.disabled]="disabled()"
+      (pointerdown)="onPointerDown($event)"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp($event)"
+      (wheel)="onWheel($event)"
+      [attr.aria-label]="disabled() ? 'Map view (interaction disabled)' : 'Interactive gradient map. Click to place a pin, drag to pan, scroll to zoom'">
+    </canvas>
+  </div>
 
   <div class="map-controls" [class.disabled]="disabled()">
     <button

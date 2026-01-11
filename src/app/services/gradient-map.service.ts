@@ -12,17 +12,18 @@ export class GradientMapService {
   private readonly colorService = inject(ColorService);
 
   /**
-   * Generates a gradient map with random white colors at the four corners
+   * Generates a gradient map with fixed white colors at the four corners
+   * Colors are always in the range (245-255) for consistency
    * @param width Width of the map in pixels
    * @param height Height of the map in pixels
    * @returns Generated gradient map
    */
   generateGradientMap(width: number, height: number): GradientMap {
-    // Generate random white colors (245-255) for each corner
-    const topLeft = this.colorService.generateRandomWhiteColor();
-    const topRight = this.colorService.generateRandomWhiteColor();
-    const bottomLeft = this.colorService.generateRandomWhiteColor();
-    const bottomRight = this.colorService.generateRandomWhiteColor();
+    // Use fixed white colors (245-255) for each corner for consistent map appearance
+    const topLeft: RGBColor = { r: 245, g: 245, b: 245 };
+    const topRight: RGBColor = { r: 255, g: 245, b: 255 };
+    const bottomLeft: RGBColor = { r: 245, g: 255, b: 255 };
+    const bottomRight: RGBColor = { r: 255, g: 255, b: 245 };
 
     return {
       width,

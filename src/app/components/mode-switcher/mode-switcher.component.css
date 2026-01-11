@@ -94,27 +94,24 @@
 
 /* Responsive design - M3 Window Size Classes */
 @media (max-width: 600px) {
-  /* Compact window */
+  /* Compact window - keep horizontal layout */
   .container {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 12px;
-    gap: 12px;
+    padding: 8px 12px;
+    gap: 8px;
     min-height: auto;
   }
 
   .app-title {
     font-size: var(--md-sys-typescale-title-medium-size);
-    text-align: center;
+    flex-shrink: 0;
   }
 
   .mode-nav {
-    width: 100%;
+    flex-shrink: 0;
   }
 
   .mode-link {
-    flex: 1;
-    text-align: center;
-    padding: 12px 16px;
+    padding: 8px 12px;
+    font-size: var(--md-sys-typescale-label-medium-size);
   }
 }

@@ -45,6 +45,11 @@ export class GradientMapComponent implements AfterViewInit {
   readonly pin = input<Pin | null>(null);
 
   /**
+   * Target pin location on the map
+   */
+  readonly targetPin = input<Pin | null>(null);
+
+  /**
    * Whether interaction is disabled
    */
   readonly disabled = input<boolean>(false);
@@ -94,6 +99,20 @@ export class GradientMapComponent implements AfterViewInit {
     effect(() => {
       // Subscribe to pin changes
       this.pin();
+
+      // Use untracked to read gradientMap without subscribing to it
+      untracked(() => {
+        const map = this.gradientMap();
+        if (map && this.canvasRef) {
+          this.renderMap(map);
+        }
+      });
+    });
+
+    // Effect to re-render when targetPin changes
+    effect(() => {
+      // Subscribe to targetPin changes
+      this.targetPin();
 
       // Use untracked to read gradientMap without subscribing to it
       untracked(() => {
@@ -287,17 +306,30 @@ export class GradientMapComponent implements AfterViewInit {
       centerX, centerY, scaledWidth, scaledHeight  // Destination rectangle (scaled and centered)
     );
 
-    // Draw pin if exists
+    // Draw target pin if exists (in green)
+    const targetPin = this.targetPin();
+    if (targetPin) {
+      this.drawPin(targetPin, scaledWidth, scaledHeight, centerX, centerY, '#10b981');
+    }
+
+    // Draw user pin if exists (in red)
     const pin = this.pin();
     if (pin) {
-      this.drawPin(pin, scaledWidth, scaledHeight, centerX, centerY);
+      this.drawPin(pin, scaledWidth, scaledHeight, centerX, centerY, '#ef4444');
     }
   }
 
   /**
    * Draws a pin on the canvas
    */
-  private drawPin(pin: Pin, scaledWidth: number, scaledHeight: number, offsetX: number, offsetY: number): void {
+  private drawPin(
+    pin: Pin,
+    scaledWidth: number,
+    scaledHeight: number,
+    offsetX: number,
+    offsetY: number,
+    color: string = '#ef4444'
+  ): void {
     // Only run in browser environment
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -317,9 +349,9 @@ export class GradientMapComponent implements AfterViewInit {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 2;
 
-    // Draw pin body (inverted teardrop shape)
+    // Draw pin body
     ctx.beginPath();
-    ctx.fillStyle = '#ef4444'; // Red color
+    ctx.fillStyle = color;
     ctx.arc(x, y, 15, 0, Math.PI * 2);
     ctx.fill();
 

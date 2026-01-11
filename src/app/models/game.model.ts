@@ -69,6 +69,8 @@ export interface GameRound {
   paletteColors: PaletteColor[];
   /** Pin placed on the map (for map mode) */
   pin?: Pin;
+  /** Target pin location on the map (for map mode) */
+  targetPin?: Pin;
   /** Time remaining when the guess was made (for map mode) */
   timeRemaining?: number;
 }

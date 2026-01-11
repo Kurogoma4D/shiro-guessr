@@ -136,9 +136,10 @@ export class MapGameService {
     const state = this._gameState();
     const current = this.currentRound();
     const pin = this._currentPin();
+    const map = this._currentGradientMap();
 
     // Validate: can only submit if game is active and pin is placed
-    if (!current || state.isCompleted || current.selectedColor !== null || !pin) {
+    if (!current || state.isCompleted || current.selectedColor !== null || !pin || !map) {
       return;
     }
 
@@ -149,6 +150,13 @@ export class MapGameService {
     const distance = this.colorService.calculateManhattanDistance(current.targetColor, pin.color);
     const score = this.scoreService.calculateRoundScore(distance);
 
+    // Find the target pin location on the map
+    const targetCoordinate = this.gradientMapService.findCoordinateForColor(map, current.targetColor);
+    const targetPin: Pin = {
+      coordinate: targetCoordinate,
+      color: current.targetColor,
+    };
+
     // Update the current round with selection
     const updatedRound: GameRound = {
       ...current,
@@ -156,6 +164,7 @@ export class MapGameService {
       distance,
       score,
       pin,
+      targetPin,
       timeRemaining: this.timerService.timeRemaining(),
     };
 

@@ -16,6 +16,7 @@
         <app-gradient-map
           [gradientMap]="currentGradientMap()"
           [pin]="currentPin()"
+          [targetPin]="currentRound()!.targetPin || null"
           [disabled]="isProcessing()"
           (pinPlaced)="onPinPlaced($event)" />
       </div>

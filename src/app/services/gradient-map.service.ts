@@ -55,6 +55,39 @@ export class GradientMapService {
   }
 
   /**
+   * Finds the coordinate on the map that has the closest color to the target color
+   * Uses a grid search approach to find the best match
+   * @param map The gradient map
+   * @param targetColor The color to find
+   * @param resolution Search resolution (higher = more accurate but slower)
+   * @returns Coordinate with the closest color
+   */
+  findCoordinateForColor(map: GradientMap, targetColor: RGBColor, resolution: number = 100): MapCoordinate {
+    let bestCoordinate: MapCoordinate = { x: 0.5, y: 0.5 };
+    let bestDistance = Infinity;
+
+    // Search the map with the given resolution
+    for (let y = 0; y <= resolution; y++) {
+      for (let x = 0; x <= resolution; x++) {
+        const coordinate: MapCoordinate = {
+          x: x / resolution,
+          y: y / resolution,
+        };
+
+        const colorAtPoint = this.getColorAt(map, coordinate);
+        const distance = this.colorService.calculateManhattanDistance(colorAtPoint, targetColor);
+
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestCoordinate = coordinate;
+        }
+      }
+    }
+
+    return bestCoordinate;
+  }
+
+  /**
    * Renders the gradient map to a canvas element
    * @param map The gradient map to render
    * @param canvas The target canvas element

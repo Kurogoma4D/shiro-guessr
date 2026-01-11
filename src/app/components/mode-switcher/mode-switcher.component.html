@@ -1,0 +1,23 @@
+<header class="mode-switcher">
+  <div class="container">
+    <h1 class="app-title">ShiroGuessr</h1>
+    <nav class="mode-nav">
+      <a
+        routerLink="/classic"
+        routerLinkActive="active"
+        class="mode-link"
+        [attr.aria-current]="currentMode() === 'classic' ? 'page' : null"
+      >
+        Classic Mode
+      </a>
+      <a
+        routerLink="/map"
+        routerLinkActive="active"
+        class="mode-link"
+        [attr.aria-current]="currentMode() === 'map' ? 'page' : null"
+      >
+        Map Mode
+      </a>
+    </nav>
+  </div>
+</header>

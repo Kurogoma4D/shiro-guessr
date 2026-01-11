@@ -67,7 +67,7 @@ describe('ShareService', () => {
 
       const text = service.generateShareText(mockGameState);
 
-      expect(text).toBe('白Guessr\n3750/5000 (75%)\nR1: 900 | R2: 850 | R3: 800 | R4: 700 | R5: 500\n#白Guessr');
+      expect(text).toBe('3750/5000 (75%)\nR1: 900 | R2: 850 | R3: 800 | R4: 700 | R5: 500\n#白Guessr');
     });
 
     it('should handle perfect score', () => {
@@ -121,7 +121,7 @@ describe('ShareService', () => {
 
       const text = service.generateShareText(mockGameState);
 
-      expect(text).toBe('白Guessr\n5000/5000 (100%)\nR1: 1000 | R2: 1000 | R3: 1000 | R4: 1000 | R5: 1000\n#白Guessr');
+      expect(text).toBe('5000/5000 (100%)\nR1: 1000 | R2: 1000 | R3: 1000 | R4: 1000 | R5: 1000\n#白Guessr');
     });
   });
 

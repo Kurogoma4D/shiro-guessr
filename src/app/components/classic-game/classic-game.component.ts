@@ -6,19 +6,20 @@ import { ColorPaletteComponent } from '../color-palette/color-palette.component'
 import { ScoreBoardComponent } from '../score-board/score-board.component';
 import { ResultComponent } from '../result/result.component';
 import { RoundResultDialog } from '../round-result-dialog/round-result-dialog';
+import { ModeSwitcherComponent } from '../mode-switcher/mode-switcher.component';
 
 /**
- * Main game component that orchestrates the game flow
+ * Classic game component that orchestrates the game flow
  * Displays the active game or results based on game state
  */
 @Component({
-  selector: 'app-game',
-  imports: [CommonModule, ColorPaletteComponent, ScoreBoardComponent, ResultComponent, RoundResultDialog],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.css',
+  selector: 'app-classic-game',
+  imports: [CommonModule, ColorPaletteComponent, ScoreBoardComponent, ResultComponent, RoundResultDialog, ModeSwitcherComponent],
+  templateUrl: './classic-game.component.html',
+  styleUrl: './classic-game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent {
+export class ClassicGameComponent {
   /**
    * Injected GameService for managing game state
    */

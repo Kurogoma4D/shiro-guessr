@@ -3,12 +3,16 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/game',
+    redirectTo: '/classic',
     pathMatch: 'full',
   },
   {
-    path: 'game',
+    path: 'classic',
     loadComponent: () =>
-      import('./components/game/game.component').then((m) => m.GameComponent),
+      import('./components/classic-game/classic-game.component').then((m) => m.ClassicGameComponent),
+  },
+  {
+    path: 'map',
+    redirectTo: '/classic',
   },
 ];

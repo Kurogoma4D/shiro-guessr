@@ -1,22 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GameComponent } from './game.component';
+import { ClassicGameComponent } from './classic-game.component';
 import { GameService } from '../../services/game.service';
 import { ColorService } from '../../services/color.service';
 import { ScoreService } from '../../services/score.service';
 import { RGBColor } from '../../models/game.model';
+import { provideRouter } from '@angular/router';
 
-describe('GameComponent', () => {
-  let component: GameComponent;
-  let fixture: ComponentFixture<GameComponent>;
+describe('ClassicGameComponent', () => {
+  let component: ClassicGameComponent;
+  let fixture: ComponentFixture<ClassicGameComponent>;
   let gameService: GameService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameComponent],
-      providers: [GameService, ColorService, ScoreService],
+      imports: [ClassicGameComponent],
+      providers: [
+        GameService,
+        ColorService,
+        ScoreService,
+        provideRouter([]),
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GameComponent);
+    fixture = TestBed.createComponent(ClassicGameComponent);
     component = fixture.componentInstance;
     gameService = TestBed.inject(GameService);
   });

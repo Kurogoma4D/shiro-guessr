@@ -5,56 +5,56 @@
 ## Phase 0: 既存ゲームの保存
 
 ### Task 0.1: 既存のgameコンポーネントをclassic-gameにリネーム
-- [ ] `src/app/components/game/` ディレクトリを `src/app/components/classic-game/` にリネーム
-- [ ] `game.component.ts` を `classic-game.component.ts` にリネーム
-- [ ] `game.component.html` を `classic-game.component.html` にリネーム
-- [ ] `game.component.css` を `classic-game.component.css` にリネーム
-- [ ] `game.component.spec.ts` を `classic-game.component.spec.ts` にリネーム
-- [ ] コンポーネント内のクラス名を `GameComponent` から `ClassicGameComponent` に変更
-- [ ] セレクタを `app-game` から `app-classic-game` に変更
+- [x] `src/app/components/game/` ディレクトリを `src/app/components/classic-game/` にリネーム
+- [x] `game.component.ts` を `classic-game.component.ts` にリネーム
+- [x] `game.component.html` を `classic-game.component.html` にリネーム
+- [x] `game.component.css` を `classic-game.component.css` にリネーム
+- [x] `game.component.spec.ts` を `classic-game.component.spec.ts` にリネーム
+- [x] コンポーネント内のクラス名を `GameComponent` から `ClassicGameComponent` に変更
+- [x] セレクタを `app-game` から `app-classic-game` に変更
 
 ### Task 0.2: ルーティングを更新
-- [ ] `src/app/app.routes.ts` を開く
-- [ ] `/game` ルートを `/classic` に変更
-- [ ] インポートパスを `./components/game/game.component` から `./components/classic-game/classic-game.component` に変更
-- [ ] コンポーネント名を `GameComponent` から `ClassicGameComponent` に変更
-- [ ] リダイレクトを `/game` から `/classic` に変更
+- [x] `src/app/app.routes.ts` を開く
+- [x] `/game` ルートを `/classic` に変更
+- [x] インポートパスを `./components/game/game.component` から `./components/classic-game/classic-game.component` に変更
+- [x] コンポーネント名を `GameComponent` から `ClassicGameComponent` に変更
+- [x] リダイレクトを `/game` から `/classic` に変更
 
 ### Task 0.3: ModeSwitcherコンポーネントの作成
-- [ ] `src/app/components/mode-switcher/` ディレクトリを作成
-- [ ] `mode-switcher.component.ts` を作成
+- [x] `src/app/components/mode-switcher/` ディレクトリを作成
+- [x] `mode-switcher.component.ts` を作成
   - Standaloneコンポーネントとして定義
   - RouterLink、RouterLinkActiveディレクティブをインポート
   - Input: `currentMode: input<'classic' | 'map'>()`
-- [ ] `mode-switcher.component.html` を作成
+- [x] `mode-switcher.component.html` を作成
   - アプリタイトル（ShiroGuessr）を表示
   - クラシックモードへのリンク（`/classic`）
   - マップモードへのリンク（`/map`）
   - 現在のモードを視覚的に強調（routerLinkActiveを使用）
-- [ ] `mode-switcher.component.css` を作成
+- [x] `mode-switcher.component.css` を作成
   - ヘッダースタイル
   - リンクのスタイル（アクティブ状態含む）
   - レスポンシブデザイン
 
 ### Task 0.4: Classic-gameにModeSwitcherを統合
-- [ ] `classic-game.component.ts` を開く
-- [ ] ModeSwitcherComponentをインポート
-- [ ] `classic-game.component.html` の先頭にModeSwitcherを追加
+- [x] `classic-game.component.ts` を開く
+- [x] ModeSwitcherComponentをインポート
+- [x] `classic-game.component.html` の先頭にModeSwitcherを追加
   ```html
   <app-mode-switcher [currentMode]="'classic'" />
   ```
 
 ### Task 0.5: ルーティングにMapルートを追加
-- [ ] `app.routes.ts` にマップルート（`/map`）を追加（仮実装）
+- [x] `app.routes.ts` にマップルート（`/map`）を追加（仮実装）
   - 一時的に404ページまたはクラシックへのリダイレクトを設定
 
 ### Task 0.6: 既存ゲームの動作確認
-- [ ] `npm start` でアプリを起動
-- [ ] `/` がクラシックモードにリダイレクトされることを確認
-- [ ] `/classic` で既存のクラシックモードゲームが動作することを確認
-- [ ] ModeSwitcherが表示され、リンクが機能することを確認
-- [ ] ゲームフローが正常に動作することを確認
-- [ ] テストを実行して既存機能が壊れていないことを確認
+- [x] `npm start` でアプリを起動
+- [x] `/` がクラシックモードにリダイレクトされることを確認
+- [x] `/classic` で既存のクラシックモードゲームが動作することを確認
+- [x] ModeSwitcherが表示され、リンクが機能することを確認
+- [x] ゲームフローが正常に動作することを確認
+- [x] テストを実行して既存機能が壊れていないことを確認
 
 ---
 

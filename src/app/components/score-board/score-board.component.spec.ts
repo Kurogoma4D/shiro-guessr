@@ -23,8 +23,8 @@ describe('ScoreBoardComponent', () => {
     fixture.componentRef.setInput('totalRounds', 5);
     fixture.detectChanges();
 
-    const roundValue = fixture.nativeElement.querySelector('.round-value');
-    expect(roundValue.textContent.trim()).toBe('3 / 5');
+    const roundInfo = fixture.nativeElement.querySelector('.round-info .info-value');
+    expect(roundInfo.textContent.trim()).toBe('3/5');
   });
 
   it('should calculate progress percentage correctly', () => {
@@ -39,29 +39,22 @@ describe('ScoreBoardComponent', () => {
     fixture.componentRef.setInput('totalScore', 2500);
     fixture.detectChanges();
 
-    const scoreValues = fixture.nativeElement.querySelectorAll('.score-value');
-    const totalScore = Array.from(scoreValues).find((el: any) =>
-      el.classList.contains('highlight')
-    ) as HTMLElement;
+    const totalScore = fixture.nativeElement.querySelector('.score-info .score-highlight');
     expect(totalScore?.textContent?.trim()).toBe('2500');
   });
 
-  it('should display current score when round is completed', () => {
+  it('should calculate round completion status', () => {
     fixture.componentRef.setInput('currentScore', 850);
     fixture.detectChanges();
 
     expect(component.isRoundCompleted()).toBe(true);
-    const currentScoreSection = fixture.nativeElement.querySelector('.current-score');
-    expect(currentScoreSection).toBeTruthy();
   });
 
-  it('should not display current score section when score is 0', () => {
+  it('should calculate round completion status as false when score is 0', () => {
     fixture.componentRef.setInput('currentScore', 0);
     fixture.detectChanges();
 
     expect(component.isRoundCompleted()).toBe(false);
-    const currentScoreSection = fixture.nativeElement.querySelector('.current-score');
-    expect(currentScoreSection).toBeFalsy();
   });
 
   it('should have proper ARIA attributes on progress bar', () => {

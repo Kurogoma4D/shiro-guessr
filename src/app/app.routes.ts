@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./components/classic-game/classic-game.component').then((m) => m.ClassicGameComponent),
   },
   {
+    path: 'game',
+    redirectTo: '/map',
+    pathMatch: 'full',
+  },
+  {
     path: 'map',
     loadComponent: () =>
       import('./components/map-game/map-game.component').then((m) => m.MapGameComponent),

@@ -1,284 +1,529 @@
-# ShiroGuessr 実装タスク一覧
+# ShiroGuessr マップモード実装タスク
 
-## Phase 1: 基盤構築
+このタスクリストは、plan.mdに基づいて現在のプロジェクトにマップモードを追加するための具体的な作業項目です。
 
-### 1.1 データモデル定義
-- [x] `src/app/models/` ディレクトリを作成
-- [x] `game.model.ts` を作成
-  - [x] `RGBColor` インターフェースを定義
-  - [x] `GameRound` インターフェースを定義
-  - [x] `GameState` インターフェースを定義
-  - [x] `PaletteColor` インターフェースを定義
+## Phase 0: 既存ゲームの保存
 
-### 1.2 ColorService実装
-- [x] `src/app/services/` ディレクトリを作成
-- [x] `color.service.ts` を作成
-  - [x] `generateRandomWhiteColor()` メソッドを実装（RGB 245-255のランダム生成）
-  - [x] `generateAllWhiteColors()` メソッドを実装（全1,331通りの白色を生成）
-  - [x] `getRandomPaletteColors(count: number)` メソッドを実装（25色のランダムサンプリング）
-  - [x] `calculateManhattanDistance(color1, color2)` メソッドを実装
-  - [x] `rgbToString(color)` メソッドを実装（CSS color文字列への変換）
-- [x] `color.service.spec.ts` でユニットテストを作成
-  - [x] `generateRandomWhiteColor` のテスト（範囲チェック）
-  - [x] `calculateManhattanDistance` のテスト（計算ロジック）
-  - [x] `rgbToString` のテスト（フォーマット確認）
+### Task 0.1: 既存のgameコンポーネントをclassic-gameにリネーム
+- [ ] `src/app/components/game/` ディレクトリを `src/app/components/classic-game/` にリネーム
+- [ ] `game.component.ts` を `classic-game.component.ts` にリネーム
+- [ ] `game.component.html` を `classic-game.component.html` にリネーム
+- [ ] `game.component.css` を `classic-game.component.css` にリネーム
+- [ ] `game.component.spec.ts` を `classic-game.component.spec.ts` にリネーム
+- [ ] コンポーネント内のクラス名を `GameComponent` から `ClassicGameComponent` に変更
+- [ ] セレクタを `app-game` から `app-classic-game` に変更
 
-### 1.3 ScoreService実装
-- [x] `score.service.ts` を作成
-  - [x] `calculateRoundScore(distance)` メソッドを実装
-    - [x] スコア計算式: `1000 × (1 - distance / 30)`
-  - [x] `calculateTotalScore(rounds)` メソッドを実装
-- [x] `score.service.spec.ts` でユニットテストを作成
-  - [x] 距離0の場合のテスト（1000ポイント）
-  - [x] 距離30の場合のテスト（0ポイント）
-  - [x] 複数ラウンドの合計スコアテスト
+### Task 0.2: ルーティングを更新
+- [ ] `src/app/app.routes.ts` を開く
+- [ ] `/game` ルートを `/classic` に変更
+- [ ] インポートパスを `./components/game/game.component` から `./components/classic-game/classic-game.component` に変更
+- [ ] コンポーネント名を `GameComponent` から `ClassicGameComponent` に変更
+- [ ] リダイレクトを `/game` から `/classic` に変更
 
-## Phase 2: ゲームロジック
+### Task 0.3: ModeSwitcherコンポーネントの作成
+- [ ] `src/app/components/mode-switcher/` ディレクトリを作成
+- [ ] `mode-switcher.component.ts` を作成
+  - Standaloneコンポーネントとして定義
+  - RouterLink、RouterLinkActiveディレクティブをインポート
+  - Input: `currentMode: input<'classic' | 'map'>()`
+- [ ] `mode-switcher.component.html` を作成
+  - アプリタイトル（ShiroGuessr）を表示
+  - クラシックモードへのリンク（`/classic`）
+  - マップモードへのリンク（`/map`）
+  - 現在のモードを視覚的に強調（routerLinkActiveを使用）
+- [ ] `mode-switcher.component.css` を作成
+  - ヘッダースタイル
+  - リンクのスタイル（アクティブ状態含む）
+  - レスポンシブデザイン
 
-### 2.1 GameService実装
-- [x] `game.service.ts` を作成
-  - [x] Signalsの定義
-    - [x] `gameState` signal（WritableSignal<GameState>）
-    - [x] `currentRound` computed signal
-    - [x] `isGameActive` computed signal
-  - [x] `startNewGame()` メソッドを実装
-    - [x] 初期状態の設定
-    - [x] 最初のラウンドの開始
-  - [x] `selectColor(color)` メソッドを実装
-    - [x] マンハッタン距離の計算
-    - [x] スコアの計算
-    - [x] GameRoundの更新
-  - [x] `nextRound()` メソッドを実装
-    - [x] 次のラウンドへの移行
-    - [x] ゲーム完了判定
-  - [x] `resetGame()` メソッドを実装
-  - [x] `replayGame()` メソッドを実装
-- [x] ColorServiceとScoreServiceを依存性注入（`inject()`使用）
-- [x] `game.service.spec.ts` でユニットテストを作成
-  - [x] ゲーム開始のテスト
-  - [x] 色選択のテスト
-  - [x] ラウンド進行のテスト
-  - [x] ゲーム完了のテスト
+### Task 0.4: Classic-gameにModeSwitcherを統合
+- [ ] `classic-game.component.ts` を開く
+- [ ] ModeSwitcherComponentをインポート
+- [ ] `classic-game.component.html` の先頭にModeSwitcherを追加
+  ```html
+  <app-mode-switcher [currentMode]="'classic'" />
+  ```
 
-## Phase 3: UIコンポーネント
+### Task 0.5: ルーティングにMapルートを追加
+- [ ] `app.routes.ts` にマップルート（`/map`）を追加（仮実装）
+  - 一時的に404ページまたはクラシックへのリダイレクトを設定
 
-### 3.1 ColorPaletteComponent実装
-- [x] `src/app/components/color-palette/` ディレクトリを作成
-- [x] `ng generate component` でコンポーネント生成
-- [x] `color-palette.component.ts` を実装
-  - [x] `input()` 定義
-    - [x] `colors: input<PaletteColor[]>()`
-    - [x] `disabled: input<boolean>()`
-  - [x] `output()` 定義
-    - [x] `colorSelected: output<RGBColor>()`
-  - [x] `ChangeDetectionStrategy.OnPush` を設定
-  - [x] テンプレートの実装
-    - [x] `@for` で25色を5x5グリッドで表示
-    - [x] `button` 要素で各色を表示（アクセシビリティ）
-    - [x] ARIA属性の設定（`role`, `aria-label`）
-    - [x] キーボード操作対応（`tabindex`, `@keydown.enter`）
-- [x] `color-palette.component.css` を実装
-  - [x] CSS Gridレイアウト（`grid-template-columns: repeat(5, 1fr)`）
-  - [x] 各セルのスタイリング（ボーダー、影）
-  - [x] ホバー効果（拡大アニメーション）
-  - [x] フォーカスインジケーター
-- [x] `color-palette.component.spec.ts` でテスト作成
-  - [x] 25色の表示テスト
-  - [x] クリックイベントのテスト
-  - [x] disabled状態のテスト
+### Task 0.6: 既存ゲームの動作確認
+- [ ] `npm start` でアプリを起動
+- [ ] `/` がクラシックモードにリダイレクトされることを確認
+- [ ] `/classic` で既存のクラシックモードゲームが動作することを確認
+- [ ] ModeSwitcherが表示され、リンクが機能することを確認
+- [ ] ゲームフローが正常に動作することを確認
+- [ ] テストを実行して既存機能が壊れていないことを確認
 
-### 3.2 ScoreBoardComponent実装
-- [x] `src/app/components/score-board/` ディレクトリを作成
-- [x] `ng generate component` でコンポーネント生成
-- [x] `score-board.component.ts` を実装
-  - [x] `input()` 定義
-    - [x] `currentRound: input<number>()`
-    - [x] `totalRounds: input<number>()`
-    - [x] `currentScore: input<number>()`
-    - [x] `totalScore: input<number>()`
-  - [x] `ChangeDetectionStrategy.OnPush` を設定
-  - [x] テンプレートの実装
-    - [x] ラウンド進捗表示
-    - [x] 現在のスコア表示
-    - [x] 累計スコア表示
-    - [x] プログレスバー
-- [x] `score-board.component.css` を実装
-  - [x] レイアウト設計
-  - [x] プログレスバーのスタイリング
-- [x] `score-board.component.spec.ts` でテスト作成
+---
 
-### 3.3 RoundDetailComponent実装
-- [x] `src/app/components/round-detail/` ディレクトリを作成
-- [x] `ng generate component` でコンポーネント生成
-- [x] `round-detail.component.ts` を実装
-  - [x] `input()` 定義
-    - [x] `round: input<GameRound>()`
-  - [x] `ChangeDetectionStrategy.OnPush` を設定
-  - [x] テンプレートの実装
-    - [x] ラウンド番号表示
-    - [x] 選択した色（カラーサンプル + RGB値）
-    - [x] 正解の色（カラーサンプル + RGB値）
-    - [x] 距離とスコア表示
-- [x] `round-detail.component.css` を実装
-- [x] `round-detail.component.spec.ts` でテスト作成
+## Phase 1: 基盤構築（マップ版）
 
-### 3.4 ResultComponent実装
-- [x] `src/app/components/result/` ディレクトリを作成
-- [x] `ng generate component` でコンポーネント生成
-- [x] `result.component.ts` を実装
-  - [x] `input()` 定義
-    - [x] `gameState: input<GameState>()`
-  - [x] `output()` 定義
-    - [x] `replay: output<void>()`
-  - [x] `ChangeDetectionStrategy.OnPush` を設定
-  - [x] パフォーマンス評価ロジック実装
-    - [x] スコアに応じた評価メッセージ（"Excellent!", "Good", "Try Again"）
-  - [x] テンプレートの実装
-    - [x] 最終スコア表示（大きく）
-    - [x] `@for` で各ラウンドの詳細表示（RoundDetailComponent使用）
-    - [x] パフォーマンス評価表示
-    - [x] リプレイボタン
-- [x] `result.component.css` を実装
-  - [x] 最終スコアの強調スタイル
-  - [x] リプレイボタンのスタイリング
-- [x] `result.component.spec.ts` でテスト作成
+### Task 1.1: データモデルの拡張
+- [ ] `src/app/models/game.model.ts` を開く
+- [ ] `MapCoordinate` インターフェースを追加
 
-### 3.5 GameComponent実装
-- [x] `src/app/components/game/` ディレクトリを作成
-- [x] `ng generate component` でコンポーネント生成
-- [x] `game.component.ts` を実装
-  - [x] GameServiceを依存性注入（`inject()`使用）
-  - [x] `computed()` でゲーム状態取得
-  - [x] `ChangeDetectionStrategy.OnPush` を設定
-  - [x] イベントハンドラ実装
-    - [x] `onColorSelected(color: RGBColor)` - 色選択時の処理
-    - [x] `onNextRound()` - 次のラウンドへ
-    - [x] `onReplay()` - リプレイ処理
-  - [x] テンプレートの実装
-    - [x] `@if` でゲーム完了状態を判定
-    - [x] ゲーム中: ScoreBoard + ColorPalette表示
-    - [x] 完了後: Result表示
-- [x] `game.component.css` を実装
-  - [x] メインレイアウト設計
-- [x] `game.component.spec.ts` でテスト作成
+  ```typescript
+  export interface MapCoordinate {
+    x: number; // 0-1の正規化座標
+    y: number; // 0-1の正規化座標
+  }
+  ```
 
-## Phase 4: 統合とポリッシュ
+- [ ] `Pin` インターフェースを追加
 
-### 4.1 ルーティング設定
-- [x] `app.routes.ts` を更新
-  - [x] ルートパス（`''`）から `/game` へのリダイレクト設定
-  - [x] `/game` ルートでGameComponentを遅延ロード
+  ```typescript
+  export interface Pin {
+    coordinate: MapCoordinate;
+    color: RGBColor;
+  }
+  ```
 
-### 4.2 アプリケーション設定
-- [x] `app.ts` を確認・更新
-  - [x] ルーティング設定の確認
-- [x] アプリケーション起動確認
-  - [x] `ng serve` でローカルサーバー起動
-  - [x] 基本動作確認
+- [ ] `ViewportState` インターフェースを追加
 
-### 4.3 スタイリングの調整
-- [x] グローバルスタイル設定（`styles.css`）
-  - [x] リセットCSS/ノーマライズ
-  - [x] カスタムカラー変数定義
-  - [x] フォント設定
-- [x] 全コンポーネントのスタイル統一
-  - [x] 色の一貫性
-  - [x] スペーシングの統一
-  - [x] タイポグラフィの統一
+  ```typescript
+  export interface ViewportState {
+    center: MapCoordinate;
+    zoom: number;
+    offset: { x: number; y: number };
+  }
+  ```
 
-### 4.4 アクセシビリティチェック
-- [x] AXEツールでチェック実行
-- [x] WCAG AA基準の確認
-  - [x] キーボード操作テスト
-  - [x] スクリーンリーダーテスト
-  - [x] 色のコントラスト比チェック（4.5:1以上）
-  - [x] フォーカス管理の確認
-- [x] 問題点の修正
+- [ ] `GradientMap` インターフェースを追加
 
-### 4.5 レスポンシブ対応
-- [x] モバイル（375px〜）のスタイル調整
-- [x] タブレット（768px〜）のスタイル調整
-- [x] デスクトップ（1024px〜）のスタイル調整
-- [x] タッチデバイスでの操作確認
+  ```typescript
+  export interface GradientMap {
+    width: number;
+    height: number;
+    cornerColors: [RGBColor, RGBColor, RGBColor, RGBColor]; // 4隅の色
+    getColorAt(coordinate: MapCoordinate): RGBColor;
+  }
+  ```
 
-## Phase 5: テストとQA
+- [ ] 既存の `GameRound` インターフェースを拡張（`pin` と `timeRemaining` を追加）
+- [ ] 既存の `GameState` インターフェースを拡張（`timeLimit` を追加）
 
-### 5.1 ユニットテスト
-- [ ] 全サービスのテスト実行（`ng test`）
-  - [ ] ColorService: カバレッジ80%以上
-  - [ ] ScoreService: カバレッジ80%以上
-  - [ ] GameService: カバレッジ80%以上
-- [ ] 全コンポーネントのテスト実行
-  - [ ] 各コンポーネント: カバレッジ70%以上
+### Task 1.2: ColorServiceの拡張
+- [ ] `src/app/services/color.service.ts` を開く
+- [ ] `interpolateColor` メソッドを追加
 
-### 5.2 E2Eテスト
-- [ ] ゲームフロー全体のテスト作成
-  - [ ] ゲーム開始
-  - [ ] 5ラウンドの色選択
-  - [ ] 結果表示
-  - [ ] リプレイ
-- [ ] スコア計算の正確性テスト
-- [ ] エラーケースのテスト
+  ```typescript
+  interpolateColor(color1: RGBColor, color2: RGBColor, t: number): RGBColor
+  ```
 
-### 5.3 手動QA
-- [ ] ゲームの完全プレイテスト（複数回）
-- [ ] UI/UXの確認
-  - [ ] アニメーションのスムーズさ
-  - [ ] フィードバックの適切性
-  - [ ] エラーメッセージの表示
-- [ ] パフォーマンステスト
-  - [ ] 初回ロード時間
-  - [ ] インタラクション応答速度
-- [ ] クロスブラウザテスト
-  - [ ] Chrome
-  - [ ] Firefox
-  - [ ] Safari
-  - [ ] Edge
+  - `t` は 0-1 の範囲で、2色間の補間位置を表す
+  - 各RGB成分を線形補間
 
-## Phase 6: 追加機能（オプション）
+### Task 1.3: TimerServiceの作成
+- [ ] `src/app/services/timer.service.ts` を作成
+- [ ] Signalsを使用した状態管理
+  - `timeRemaining: WritableSignal<number>`
+  - `isRunning: WritableSignal<boolean>`
+- [ ] `startTimer(duration: number): void` メソッドを実装
+  - RxJSの `interval` を使用して1秒ごとにカウントダウン
+- [ ] `stopTimer(): void` メソッドを実装
+- [ ] `resetTimer(): void` メソッドを実装
+- [ ] `onTimeout: Observable<void>` を実装
+  - タイムアウト時にイベントを発行
+- [ ] `timer.service.spec.ts` を作成してテストを追加
 
-### 6.1 ローカルストレージでのハイスコア保存
-- [ ] `storage.service.ts` を作成
-- [ ] ハイスコア保存機能実装
-- [ ] ハイスコア表示UIの追加
+---
 
-### 6.2 難易度設定
-- [ ] 難易度選択UIの追加
-- [ ] 色の範囲を可変にする機能
-  - [ ] Easy: RGB 240-255
-  - [ ] Normal: RGB 245-255
-  - [ ] Hard: RGB 250-255
+## Phase 2: グラデーションマップ
 
-### 6.3 結果のシェア機能
+### Task 2.1: GradientMapServiceの作成
+- [ ] `src/app/services/gradient-map.service.ts` を作成
+- [ ] ColorServiceを注入
+- [ ] `generateGradientMap(width: number, height: number): GradientMap` メソッドを実装
+  - 4隅にランダムな白色（RGB 245-255）を生成
+  - バイリニア補間でグラデーションを計算する関数を返す
+- [ ] `getColorAt(map: GradientMap, coordinate: MapCoordinate): RGBColor` メソッドを実装
+  - バイリニア補間アルゴリズム:
+    1. 座標を正規化（0-1）
+    2. 上辺と下辺をそれぞれ補間
+    3. 上下の結果を縦方向に補間
+- [ ] `renderMapToCanvas(map: GradientMap, canvas: HTMLCanvasElement): void` メソッドを実装
+  - Canvas 2D contextを取得
+  - 全ピクセルをループして色を計算
+  - ImageDataを使用して一括描画
+- [ ] `gradient-map.service.spec.ts` を作成
+  - グラデーション生成のテスト
+  - バイリニア補間の正確性テスト
+  - 色の範囲（245-255）が守られているかテスト
+
+---
+
+## Phase 3: マップナビゲーション
+
+### Task 3.1: MapNavigationServiceの作成
+- [ ] `src/app/services/map-navigation.service.ts` を作成
+- [ ] Signalsを使用した状態管理
+  - `viewportState: WritableSignal<ViewportState>`
+  - 初期値: `{ center: { x: 0.5, y: 0.5 }, zoom: 1.0, offset: { x: 0, y: 0 } }`
+- [ ] `pan(deltaX: number, deltaY: number): void` メソッドを実装
+  - offsetを更新
+  - ズームレベルを考慮した移動量の調整
+- [ ] `zoom(delta: number, center?: MapCoordinate): void` メソッドを実装
+  - ズームレベルを更新（0.5 - 4.0の範囲に制限）
+  - centerが指定されている場合、その点を中心にズーム
+- [ ] `resetView(): void` メソッドを実装
+  - 初期ビューポートに戻す
+- [ ] `screenToMapCoordinate(screenX: number, screenY: number, canvasWidth: number, canvasHeight: number): MapCoordinate` メソッドを実装
+  - 画面座標をマップ座標（0-1）に変換
+  - ズームとオフセットを考慮
+- [ ] `map-navigation.service.spec.ts` を作成
+  - 座標変換のテスト
+  - パン・ズーム操作のテスト
+
+### Task 3.2: GradientMapComponentの作成
+- [ ] `src/app/components/gradient-map/` ディレクトリを作成
+- [ ] `gradient-map.component.ts` を作成
+  - Standaloneコンポーネント
+  - Inputs:
+    - `gradientMap: input<GradientMap | null>()`
+    - `pin: input<Pin | null>()`
+    - `disabled: input<boolean>(false)`
+  - Outputs:
+    - `pinPlaced: output<MapCoordinate>()`
+  - GradientMapServiceとMapNavigationServiceを注入
+  - `@ViewChild('canvas')` でCanvas要素を参照
+- [ ] Canvas要素の初期化とレンダリング
+  - `ngAfterViewInit` でCanvasを初期化
+  - `effect` を使用してgradientMapの変更を監視し、再描画
+- [ ] マウス/タッチイベントの実装
+  - `onPointerDown`: パン開始、またはピン配置
+  - `onPointerMove`: パン中の処理
+  - `onPointerUp`: パン終了、ピン配置確定
+  - `onWheel`: ズーム操作
+- [ ] ピンの描画
+  - ピンがある場合、Canvas上にマーカーを描画
+  - SVGまたはCanvas APIで描画
+- [ ] `gradient-map.component.html` を作成
+  - Canvas要素
+  - ズームコントロールUI（+/-ボタン）
+  - リセットボタン
+- [ ] `gradient-map.component.css` を作成
+  - Canvasのスタイリング
+  - コントロールUIの配置（右下に固定）
+  - ピンマーカーのスタイル
+- [ ] `gradient-map.component.spec.ts` を作成
+
+---
+
+## Phase 4: ゲームロジック（マップ版）
+
+### Task 4.1: マップ版用のGameServiceの作成または拡張
+**オプション1: 既存GameServiceを拡張**
+- [ ] `src/app/services/game.service.ts` を開く
+- [ ] マップ版用の状態を追加
+  - `currentGradientMap: WritableSignal<GradientMap | null>`
+  - `currentPin: WritableSignal<Pin | null>`
+- [ ] TimerServiceを注入
+- [ ] マップ版用メソッドを追加
+  - `startNewMapGame(): void`
+  - `placePin(coordinate: MapCoordinate): void`
+  - `submitGuess(): void`
+  - `handleTimeout(): void`
+
+**オプション2: MapGameServiceを分離作成**
+- [ ] `src/app/services/map-game.service.ts` を作成
+- [ ] Signalsベースの状態管理
+  - `gameState: WritableSignal<GameState>`
+  - `currentGradientMap: WritableSignal<GradientMap | null>`
+  - `currentPin: WritableSignal<Pin | null>`
+- [ ] ColorService、ScoreService、TimerService、GradientMapServiceを注入
+- [ ] `startNewGame(): void` メソッドを実装
+  - 新しいラウンドを開始
+  - グラデーションマップを生成
+  - タイマーを開始
+- [ ] `placePin(coordinate: MapCoordinate): void` メソッドを実装
+  - ピンの座標を保存
+  - その座標の色を取得して保存
+- [ ] `submitGuess(): void` メソッドを実装
+  - タイマーを停止
+  - ピンの色と正解の色の距離を計算
+  - スコアを計算
+  - ラウンド結果を保存
+- [ ] `handleTimeout(): void` メソッドを実装
+  - タイムアウト時の処理（submitGuessと同様）
+- [ ] `nextRound(): void` メソッドを実装
+- [ ] `resetGame(): void` メソッドを実装
+- [ ] `replayGame(): void` メソッドを実装
+- [ ] `map-game.service.spec.ts` を作成
+
+---
+
+## Phase 5: UIコンポーネント（マップ版）
+
+### Task 5.1: GameHeaderComponentの作成
+- [ ] `src/app/components/game-header/` ディレクトリを作成
+- [ ] `game-header.component.ts` を作成
+  - Standaloneコンポーネント
+  - Inputs:
+    - `targetColor: input.required<RGBColor>()`
+    - `currentRound: input.required<number>()`
+    - `totalRounds: input.required<number>()`
+    - `timeRemaining: input.required<number>()`
+    - `currentScore: input<number>(0)`
+- [ ] `game-header.component.html` を作成
+  - 正解の色のサンプル（大きく表示）
+  - RGB値の表示
+  - タイマー（カウントダウン）
+    - 時間切れ警告（残り10秒以下で赤色など）
+  - ラウンド進捗（"Round 3 / 5"）
+  - 現在のスコア
+- [ ] `game-header.component.css` を作成
+  - ヘッダーレイアウト
+  - タイマーのスタイル（アニメーション）
+  - レスポンシブ対応
+- [ ] `game-header.component.spec.ts` を作成
+
+### Task 5.2: GameControlsComponentの作成
+- [ ] `src/app/components/game-controls/` ディレクトリを作成
+- [ ] `game-controls.component.ts` を作成
+  - Standaloneコンポーネント
+  - Inputs:
+    - `hasPin: input<boolean>(false)`
+    - `disabled: input<boolean>(false)`
+  - Outputs:
+    - `guess: output<void>()`
+- [ ] `game-controls.component.html` を作成
+  - Guessボタン
+    - `hasPin` が false の場合は無効化
+    - `disabled` が true の場合も無効化
+- [ ] `game-controls.component.css` を作成
+  - ボタンのスタイリング
+  - ホバー効果
+  - 無効化時のスタイル
+- [ ] `game-controls.component.spec.ts` を作成
+
+### Task 5.3: RoundDetailComponentの拡張
+- [ ] `src/app/components/round-detail/round-detail.component.ts` を開く
+- [ ] マップ版の情報を表示できるように拡張
+  - `pin` プロパティがある場合は、ピンの座標も表示
+  - `timeRemaining` を表示（使用時間を計算）
+- [ ] `round-detail.component.html` を更新
+  - 選択した色のカラーサンプルとRGB値
+  - 正解の色のカラーサンプルとRGB値
+  - 距離とスコア
+  - 使用時間（マップ版の場合）
+
+### Task 5.4: ResultComponentの拡張
+- [ ] `src/app/components/result/result.component.ts` を開く
+- [ ] マップ版の結果表示に対応
+  - 現状の実装で両バージョンに対応できているか確認
+  - 必要に応じて調整
+- [ ] `result.component.html` を確認
+  - RoundDetailコンポーネントで拡張した情報が表示されることを確認
+
+---
+
+## Phase 6: 統合とポリッシュ
+
+### Task 6.1: MapGameComponentの作成
+- [ ] `src/app/components/map-game/` ディレクトリを作成
+- [ ] `map-game.component.ts` を作成
+  - Standaloneコンポーネント
+  - 必要なコンポーネントをインポート:
+    - ModeSwitcherComponent
+    - GameHeaderComponent
+    - GradientMapComponent
+    - GameControlsComponent
+    - ResultComponent
+  - MapGameService（またはGameService）を注入
+  - TimerServiceを注入
+  - ゲーム状態をSignalsで管理
+  - タイマーのonTimeoutイベントを購読
+- [ ] `map-game.component.html` を作成
+  - テンプレート構造:
+
+    ```html
+    <app-mode-switcher [currentMode]="'map'" />
+    @if (gameState().isComplete) {
+      <app-result
+        [gameState]="gameState()"
+        (replay)="onReplay()" />
+    } @else {
+      <app-game-header
+        [targetColor]="currentRound().targetColor"
+        [currentRound]="gameState().currentRound"
+        [totalRounds]="gameState().totalRounds"
+        [timeRemaining]="timeRemaining()"
+        [currentScore]="currentScore()" />
+      <app-gradient-map
+        [gradientMap]="currentGradientMap()"
+        [pin]="currentPin()"
+        [disabled]="isProcessing()"
+        (pinPlaced)="onPinPlaced($event)" />
+      <app-game-controls
+        [hasPin]="currentPin() !== null"
+        [disabled]="isProcessing()"
+        (guess)="onGuess()" />
+    }
+    ```
+
+- [ ] `map-game.component.css` を作成
+  - レイアウト（ヘッダー、マップ、コントロール）
+  - レスポンシブ対応
+- [ ] イベントハンドラの実装
+  - `onPinPlaced(coordinate: MapCoordinate): void`
+  - `onGuess(): void`
+  - `onReplay(): void`
+  - `onTimeout(): void`
+- [ ] `map-game.component.spec.ts` を作成
+
+### Task 6.2: ルーティングの最終調整
+- [ ] `app.routes.ts` を開く
+- [ ] `/map` ルートのインポートパスを正しく設定
+  - `./components/map-game/map-game.component` から `MapGameComponent` をインポート
+
+### Task 6.3: ModeSwitcherコンポーネントの仕上げ
+- [ ] `mode-switcher.component.css` を開く
+- [ ] デザインを洗練
+  - ヘッダーのスタイリング
+  - リンクのホバー効果
+  - アクティブ状態の視覚化（ボーダー、背景色など）
+- [ ] モバイル対応
+  - 小さな画面でのレイアウト調整
+  - タッチ操作に適したタップ領域
+
+### Task 6.4: スタイリングの調整
+- [ ] 全体のカラーテーマを統一
+- [ ] タイポグラフィの調整
+- [ ] 余白とレイアウトの微調整
+- [ ] モバイル、タブレット、デスクトップでの表示確認
+
+### Task 6.5: アクセシビリティチェック
+- [ ] キーボード操作の確認
+  - Tabキーでフォーカス移動
+  - Enterキーでボタン操作
+  - 矢印キーでマップ移動（可能であれば）
+- [ ] ARIA属性の追加
+  - ボタンのaria-label
+  - タイマーのaria-live
+  - マップのaria-describedby
+- [ ] スクリーンリーダーでのテスト
+- [ ] 色のコントラスト比チェック（WCAG AA基準）
+
+### Task 6.6: レスポンシブ対応の確認
+- [ ] モバイル（320px-767px）での表示確認
+  - マップのタッチ操作
+  - UIの配置
+- [ ] タブレット（768px-1023px）での表示確認
+- [ ] デスクトップ（1024px以上）での表示確認
+- [ ] 横向き・縦向きでの表示確認
+
+### Task 6.7: パフォーマンス最適化
+- [ ] グラデーションマップの生成を最適化
+  - キャッシュの活用
+  - オフスクリーンCanvasの検討
+- [ ] イベントハンドラのスロットリング
+  - パン操作
+  - ズーム操作
+- [ ] OnPush変更検知戦略の確認
+- [ ] 不要な再描画の削減
+
+### Task 6.8: 動作確認とテスト
+- [ ] クラシックモードの動作確認（既存機能が壊れていないか）
+  - ゲーム開始
+  - 色の選択
+  - スコア計算
+  - ラウンド遷移
+  - 結果表示
+  - リプレイ
+  - ModeSwitcherからマップモードへの遷移
+- [ ] マップモードの動作確認
+  - ゲーム開始
+  - グラデーションマップの表示
+  - パン・ズーム操作
+  - ピン配置
+  - タイマーのカウントダウン
+  - タイムアウト処理
+  - Guessボタンでの回答
+  - スコア計算
+  - ラウンド遷移
+  - 結果表示
+  - リプレイ
+  - ModeSwitcherからクラシックモードへの遷移
+- [ ] モード切替の動作確認
+  - クラシック → マップの遷移
+  - マップ → クラシックの遷移
+  - URLの直接入力での遷移
+  - ブラウザの戻る・進むボタン
+- [ ] エッジケースのテスト
+  - ピンを配置せずにタイムアウト
+  - 素早く連続でGuessボタンを押す
+  - マップの境界での操作
+  - ゲーム中にモードを切り替える
+- [ ] 既存のユニットテストを実行
+  - `npm test`
+  - すべてのテストがパスすることを確認
+- [ ] 新規テストを実行
+  - 新しいサービス・コンポーネントのテスト
+
+---
+
+## Phase 7: 追加機能（オプション）
+
+### Task 7.1: ローカルストレージでのハイスコア保存
+- [ ] StorageServiceの作成
+  - パレット版とマップ版のハイスコアを個別に保存
+- [ ] ゲーム終了時にハイスコアを保存
+- [ ] ハイスコア表示UIの作成
+
+### Task 7.2: 難易度設定
+- [ ] 設定画面コンポーネントの作成
+- [ ] クラシックモード: パレットサイズ変更（3x3, 5x5, 7x7）
+- [ ] マップモード: 制限時間調整（30秒、60秒、90秒、無制限）
+- [ ] マップモード: 色の範囲変更（難易度による）
+
+### Task 7.3: 結果のシェア機能
 - [ ] シェアボタンの追加
-- [ ] Web Share API の実装
-- [ ] スコアのテキスト化
+- [ ] Web Share APIの活用
+- [ ] スコアをテキストとして生成
+- [ ] SNSシェア用のテキストフォーマット
 
-### 6.4 アニメーション効果
-- [ ] ページ遷移アニメーション
-- [ ] スコア表示のカウントアップアニメーション
-- [ ] カラーパレットの表示アニメーション
+### Task 7.4: アニメーション効果
+- [ ] ピン配置時のアニメーション
+- [ ] スコア表示時のアニメーション
+- [ ] ラウンド遷移のアニメーション
+- [ ] タイマー警告のアニメーション
 
-## デプロイメント
+### Task 7.5: サウンドエフェクト
+- [ ] AudioServiceの作成
+- [ ] ピン配置音
+- [ ] 正解・不正解の効果音
+- [ ] タイマー警告音
+- [ ] ゲーム終了音
 
-### 7.1 本番ビルド
-- [ ] `ng build` で本番ビルド実行
-- [ ] ビルドサイズの確認と最適化
-- [ ] 各種最適化の確認
-  - [ ] コード分割
-  - [ ] Tree shaking
-  - [ ] ミニフィケーション
+### Task 7.6: モード間のハイスコア比較
+- [ ] 統計画面コンポーネントの作成
+- [ ] パレット版とマップ版のベストスコアを比較表示
+- [ ] プレイ回数や平均スコアの表示
 
-### 7.2 デプロイ
-- [ ] デプロイ先の選定（Firebase Hosting, Vercel, Netlifyなど）
-- [ ] デプロイ設定
-- [ ] 本番環境でのテスト
+---
 
-## 完了条件
+## 完了基準
 
-- [ ] 全ユニットテストがパス
-- [ ] E2Eテストがパス
-- [ ] AXEチェックで問題なし
-- [ ] 主要ブラウザで動作確認完了
-- [ ] レスポンシブ対応完了
-- [ ] ゲームが正しく動作（5ラウンド完走、リプレイ可能）
+各フェーズの完了基準：
+
+- **Phase 0**: 既存ゲームが `/classic` で動作し、ModeSwitcherが表示される
+- **Phase 1**: 新しいモデルとサービスが作成され、ユニットテストがパスする
+- **Phase 2**: グラデーションマップが正しく生成され、Canvasに描画される
+- **Phase 3**: マップのパン・ズーム・ピン配置が動作する
+- **Phase 4**: マップモードのゲームロジックが完成し、タイマーと連携する
+- **Phase 5**: すべてのUIコンポーネントが作成され、単体で動作する
+- **Phase 6**: マップモードゲームが完全に動作し、両モードが正常に機能する
+- **Phase 7**: オプション機能が実装され、ユーザー体験が向上する
+
+---
+
+## 注意事項
+
+- 各タスクは独立して実行可能にする
+- 既存のクラシックモードゲームを壊さないように注意
+- コミットは小さく、頻繁に行う
+- テストを書いてから実装する（TDD推奨）
+- Angular Best Practicesに従う（Signals、OnPush、Standalone、inject()など）
+- アクセシビリティを常に考慮する

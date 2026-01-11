@@ -8,7 +8,10 @@
       (pointermove)="onPointerMove($event)"
       (pointerup)="onPointerUp($event)"
       (wheel)="onWheel($event)"
-      [attr.aria-label]="disabled() ? 'Map view (interaction disabled)' : 'Interactive gradient map. Click to place a pin, drag to pan, scroll to zoom'">
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd($event)"
+      [attr.aria-label]="disabled() ? 'Map view (interaction disabled)' : 'Interactive gradient map. Click to place a pin, drag to pan, scroll or pinch to zoom'">
     </canvas>
   </div>
 

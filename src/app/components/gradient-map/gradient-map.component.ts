@@ -68,6 +68,21 @@ export class GradientMapComponent implements AfterViewInit {
   private lastPointerPosition: { x: number; y: number } | null = null;
 
   /**
+   * Initial distance between two touch points for pinch zoom
+   */
+  private initialPinchDistance: number | null = null;
+
+  /**
+   * Last recorded distance between two touch points
+   */
+  private lastPinchDistance: number | null = null;
+
+  /**
+   * Whether a pinch gesture is in progress
+   */
+  private readonly isPinching = signal(false);
+
+  /**
    * Offscreen canvas for caching the gradient map
    */
   private offscreenCanvas: HTMLCanvasElement | null = null;
@@ -238,7 +253,7 @@ export class GradientMapComponent implements AfterViewInit {
    * Handles pointer down event
    */
   onPointerDown(event: PointerEvent): void {
-    if (this.disabled()) {
+    if (this.disabled() || this.isPinching()) {
       return;
     }
 
@@ -258,7 +273,7 @@ export class GradientMapComponent implements AfterViewInit {
    * Handles pointer move event
    */
   onPointerMove(event: PointerEvent): void {
-    if (!this.lastPointerPosition || this.disabled()) {
+    if (!this.lastPointerPosition || this.disabled() || this.isPinching()) {
       return;
     }
 
@@ -283,7 +298,7 @@ export class GradientMapComponent implements AfterViewInit {
    * Handles pointer up event
    */
   onPointerUp(event: PointerEvent): void {
-    if (this.disabled()) {
+    if (this.disabled() || this.isPinching()) {
       return;
     }
 
@@ -322,6 +337,71 @@ export class GradientMapComponent implements AfterViewInit {
 
     const delta = event.deltaY > 0 ? -0.1 : 0.1;
     this.navigationService.zoom(delta);
+  }
+
+  /**
+   * Handles touch start event for pinch zoom
+   */
+  onTouchStart(event: TouchEvent): void {
+    if (this.disabled() || event.touches.length !== 2) {
+      return;
+    }
+
+    event.preventDefault();
+
+    // Calculate initial distance between two touch points
+    const distance = this.getTouchDistance(event.touches);
+    this.initialPinchDistance = distance;
+    this.lastPinchDistance = distance;
+    this.isPinching.set(true);
+  }
+
+  /**
+   * Handles touch move event for pinch zoom
+   */
+  onTouchMove(event: TouchEvent): void {
+    if (this.disabled() || !this.isPinching() || event.touches.length !== 2) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const currentDistance = this.getTouchDistance(event.touches);
+
+    if (this.lastPinchDistance !== null) {
+      // Calculate zoom delta based on distance change
+      const distanceChange = currentDistance - this.lastPinchDistance;
+      const zoomDelta = distanceChange * 0.01; // Scale factor for zoom sensitivity
+
+      this.navigationService.zoom(zoomDelta);
+    }
+
+    this.lastPinchDistance = currentDistance;
+  }
+
+  /**
+   * Handles touch end event for pinch zoom
+   */
+  onTouchEnd(event: TouchEvent): void {
+    if (this.disabled()) {
+      return;
+    }
+
+    // Reset pinch state when fingers are lifted
+    if (event.touches.length < 2) {
+      this.isPinching.set(false);
+      this.initialPinchDistance = null;
+      this.lastPinchDistance = null;
+    }
+  }
+
+  /**
+   * Calculates the distance between two touch points
+   */
+  private getTouchDistance(touches: TouchList): number {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
   }
 
   /**

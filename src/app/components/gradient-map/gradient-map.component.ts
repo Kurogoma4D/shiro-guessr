@@ -7,14 +7,12 @@ import {
   AfterViewInit,
   effect,
   inject,
-  signal,
   PLATFORM_ID,
   untracked,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { GradientMap, Pin, MapCoordinate, ViewportState } from '../../models/game.model';
+import { GradientMap, Pin, MapCoordinate } from '../../models/game.model';
 import { GradientMapService } from '../../services/gradient-map.service';
-import { MapNavigationService } from '../../services/map-navigation.service';
 
 /**
  * Component for displaying and interacting with a gradient map
@@ -28,7 +26,6 @@ import { MapNavigationService } from '../../services/map-navigation.service';
 })
 export class GradientMapComponent implements AfterViewInit {
   private readonly gradientMapService = inject(GradientMapService);
-  private readonly navigationService = inject(MapNavigationService);
   private readonly platformId = inject(PLATFORM_ID);
 
   /**
@@ -57,30 +54,6 @@ export class GradientMapComponent implements AfterViewInit {
    */
   readonly pinPlaced = output<MapCoordinate>();
 
-  /**
-   * Whether panning is active
-   */
-  private readonly isPanning = signal(false);
-
-  /**
-   * Last pointer position for panning
-   */
-  private lastPointerPosition: { x: number; y: number } | null = null;
-
-  /**
-   * Initial distance between two touch points for pinch zoom
-   */
-  private initialPinchDistance: number | null = null;
-
-  /**
-   * Last recorded distance between two touch points
-   */
-  private lastPinchDistance: number | null = null;
-
-  /**
-   * Whether a pinch gesture is in progress
-   */
-  private readonly isPinching = signal(false);
 
   /**
    * Offscreen canvas for caching the gradient map
@@ -101,23 +74,13 @@ export class GradientMapComponent implements AfterViewInit {
     // Effect to render the map when it changes
     effect(() => {
       const map = this.gradientMap();
-      console.log('Map effect triggered, map:', map ? 'exists' : 'null');
       if (map && this.canvasRef) {
         // Check if this is actually a new map
         const isNewMap = this.lastRenderedMap !== map;
-        console.log('Is new map:', isNewMap);
 
         if (isNewMap) {
           // Clear offscreen canvas when map changes to force re-render
           this.offscreenCanvas = null;
-
-          // Reset viewport when new map is loaded (only if canvas is ready)
-          if (isPlatformBrowser(this.platformId) &&
-              this.canvasRef.nativeElement.width > 0 &&
-              this.canvasRef.nativeElement.height > 0) {
-            console.log('Calling initializeViewport from map effect');
-            this.initializeViewport();
-          }
 
           // Update last rendered map reference
           this.lastRenderedMap = map;
@@ -125,21 +88,6 @@ export class GradientMapComponent implements AfterViewInit {
 
         this.renderMap(map);
       }
-    });
-
-    // Effect to re-render when viewport changes
-    effect(() => {
-      // Subscribe to viewport changes
-      this.navigationService.viewportState();
-
-      // Use untracked to read gradientMap without subscribing to it
-      // This prevents circular dependency between viewport and map changes
-      untracked(() => {
-        const map = this.gradientMap();
-        if (map && this.canvasRef && this.canvasRef.nativeElement.width > 0) {
-          this.renderMap(map);
-        }
-      });
     });
 
     // Effect to re-render when pin changes
@@ -168,9 +116,6 @@ export class GradientMapComponent implements AfterViewInit {
       // Set canvas size to match its displayed size
       this.resizeCanvas();
 
-      // Initialize viewport to fit map
-      this.initializeViewport();
-
       // Re-render when gradient map is set
       const map = this.gradientMap();
       if (map) {
@@ -182,7 +127,6 @@ export class GradientMapComponent implements AfterViewInit {
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', () => {
         this.resizeCanvas();
-        this.initializeViewport();
         const currentMap = this.gradientMap();
         if (currentMap) {
           this.renderMap(currentMap);
@@ -213,47 +157,12 @@ export class GradientMapComponent implements AfterViewInit {
     canvas.height = rect.height;
   }
 
-  /**
-   * Initializes the viewport to fit the map in the canvas
-   */
-  private initializeViewport(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    const canvas = this.canvasRef.nativeElement;
-
-    // Early return if canvas is not ready
-    if (canvas.width === 0 || canvas.height === 0) {
-      return;
-    }
-
-    const dimensions = this.getDisplayDimensions();
-    if (!dimensions) {
-      return;
-    }
-
-    const displayWidth = dimensions.width;
-    const displayHeight = dimensions.height;
-
-    // Calculate zoom to fit map in canvas (full width)
-    const zoomX = canvas.width / displayWidth;
-    const zoomY = canvas.height / displayHeight;
-    const fitZoom = Math.min(zoomX, zoomY); // Fill entire screen width/height
-
-    // Always set viewport to fit map to screen
-    this.navigationService.viewportState.set({
-      center: { x: 0.5, y: 0.5 },
-      zoom: fitZoom,
-      offset: { x: 0, y: 0 },
-    });
-  }
 
   /**
-   * Handles pointer down event
+   * Handles canvas click event
    */
-  onPointerDown(event: PointerEvent): void {
-    if (this.disabled() || this.isPinching()) {
+  onCanvasClick(event: MouseEvent): void {
+    if (this.disabled()) {
       return;
     }
 
@@ -262,190 +171,7 @@ export class GradientMapComponent implements AfterViewInit {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    this.lastPointerPosition = { x, y };
-    this.isPanning.set(false); // Start as not panning
-
-    // Prevent default to avoid text selection
-    event.preventDefault();
-  }
-
-  /**
-   * Handles pointer move event
-   */
-  onPointerMove(event: PointerEvent): void {
-    if (!this.lastPointerPosition || this.disabled() || this.isPinching()) {
-      return;
-    }
-
-    const canvas = this.canvasRef.nativeElement;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const deltaX = x - this.lastPointerPosition.x;
-    const deltaY = y - this.lastPointerPosition.y;
-
-    // Check if this is actually a pan (moved more than threshold)
-    const threshold = 5;
-    if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
-      this.isPanning.set(true); // Set panning to true only when actually moving
-      this.navigationService.pan(deltaX, deltaY);
-      this.lastPointerPosition = { x, y };
-    }
-  }
-
-  /**
-   * Handles pointer up event
-   */
-  onPointerUp(event: PointerEvent): void {
-    if (this.disabled() || this.isPinching()) {
-      return;
-    }
-
-    const wasPanning = this.isPanning();
-    this.isPanning.set(false);
-
-    // If not panning (was a click), place pin
-    if (!wasPanning && this.lastPointerPosition) {
-      const canvas = this.canvasRef.nativeElement;
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      // Check if pointer didn't move much (was a click, not a drag)
-      const threshold = 5;
-      const dx = Math.abs(x - this.lastPointerPosition.x);
-      const dy = Math.abs(y - this.lastPointerPosition.y);
-
-      if (dx <= threshold && dy <= threshold) {
-        this.placePin(x, y);
-      }
-    }
-
-    this.lastPointerPosition = null;
-  }
-
-  /**
-   * Handles wheel event for zooming
-   */
-  onWheel(event: WheelEvent): void {
-    if (this.disabled()) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const delta = event.deltaY > 0 ? -0.1 : 0.1;
-    this.navigationService.zoom(delta);
-  }
-
-  /**
-   * Handles touch start event for pinch zoom
-   */
-  onTouchStart(event: TouchEvent): void {
-    if (this.disabled() || event.touches.length !== 2) {
-      return;
-    }
-
-    event.preventDefault();
-
-    // Calculate initial distance between two touch points
-    const distance = this.getTouchDistance(event.touches);
-    this.initialPinchDistance = distance;
-    this.lastPinchDistance = distance;
-    this.isPinching.set(true);
-  }
-
-  /**
-   * Handles touch move event for pinch zoom
-   */
-  onTouchMove(event: TouchEvent): void {
-    if (this.disabled() || !this.isPinching() || event.touches.length !== 2) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const currentDistance = this.getTouchDistance(event.touches);
-
-    if (this.lastPinchDistance !== null) {
-      // Calculate zoom delta based on distance change
-      const distanceChange = currentDistance - this.lastPinchDistance;
-      const zoomDelta = distanceChange * 0.01; // Scale factor for zoom sensitivity
-
-      this.navigationService.zoom(zoomDelta);
-    }
-
-    this.lastPinchDistance = currentDistance;
-  }
-
-  /**
-   * Handles touch end event for pinch zoom
-   */
-  onTouchEnd(event: TouchEvent): void {
-    if (this.disabled()) {
-      return;
-    }
-
-    // Reset pinch state when fingers are lifted
-    if (event.touches.length < 2) {
-      this.isPinching.set(false);
-      this.initialPinchDistance = null;
-      this.lastPinchDistance = null;
-    }
-  }
-
-  /**
-   * Calculates the distance between two touch points
-   */
-  private getTouchDistance(touches: TouchList): number {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  /**
-   * Zooms in
-   */
-  zoomIn(): void {
-    console.log('zoomIn called, disabled:', this.disabled());
-    if (this.disabled()) {
-      return;
-    }
-
-    const beforeZoom = this.navigationService.viewportState().zoom;
-    console.log('Before zoom:', beforeZoom);
-    this.navigationService.zoom(0.2);
-
-    // Check immediately after
-    setTimeout(() => {
-      const afterZoom = this.navigationService.viewportState().zoom;
-      console.log('After zoom (immediate):', afterZoom);
-    }, 0);
-
-    // Check after a delay
-    setTimeout(() => {
-      const afterZoom = this.navigationService.viewportState().zoom;
-      console.log('After zoom (delayed 100ms):', afterZoom);
-    }, 100);
-  }
-
-  /**
-   * Zooms out
-   */
-  zoomOut(): void {
-    if (this.disabled()) {
-      return;
-    }
-
-    this.navigationService.zoom(-0.2);
-  }
-
-  /**
-   * Resets the view
-   */
-  resetView(): void {
-    this.navigationService.resetView();
+    this.placePin(x, y);
   }
 
   /**
@@ -469,27 +195,29 @@ export class GradientMapComponent implements AfterViewInit {
     const dimensions = this.getDisplayDimensions();
     if (!dimensions) return;
 
-    const displayWidth = dimensions.width;
-    const displayHeight = dimensions.height;
+    const originalWidth = dimensions.width;
+    const originalHeight = dimensions.height;
 
-    // Get viewport state
-    const viewport = this.navigationService.viewportState();
+    // Calculate scale to fit map in canvas (same as renderMap)
+    const scaleX = canvas.width / originalWidth;
+    const scaleY = canvas.height / originalHeight;
+    const scale = Math.min(scaleX, scaleY);
 
-    // Calculate center offset (same logic as renderMap)
-    const scaledWidth = displayWidth * viewport.zoom;
-    const scaledHeight = displayHeight * viewport.zoom;
-    const centerX = Math.max(0, (canvas.width - scaledWidth) / 2);
-    const centerY = Math.max(0, (canvas.height - scaledHeight) / 2);
+    // Calculate scaled dimensions
+    const scaledWidth = originalWidth * scale;
+    const scaledHeight = originalHeight * scale;
 
-    // Inverse transformation: screen -> map coordinates
-    // screenX = (mapX * zoom) + (centerX + offset.x)
-    // mapX = (screenX - centerX - offset.x) / zoom
-    const mapX = (screenX - centerX - viewport.offset.x) / viewport.zoom;
-    const mapY = (screenY - centerY - viewport.offset.y) / viewport.zoom;
+    // Calculate center offset
+    const centerX = (canvas.width - scaledWidth) / 2;
+    const centerY = (canvas.height - scaledHeight) / 2;
+
+    // Convert screen coordinates to map coordinates
+    const mapX = screenX - centerX;
+    const mapY = screenY - centerY;
 
     // Normalize to 0-1 range
-    const normalizedX = mapX / displayWidth;
-    const normalizedY = mapY / displayHeight;
+    const normalizedX = mapX / scaledWidth;
+    const normalizedY = mapY / scaledHeight;
 
     // Clamp to valid range
     const coordinate: MapCoordinate = {
@@ -526,56 +254,50 @@ export class GradientMapComponent implements AfterViewInit {
       this.gradientMapService.renderMapToCanvas(map, this.offscreenCanvas);
     }
 
-    // Get viewport state
-    const viewport = this.navigationService.viewportState();
-
-    // Calculate display size
+    // Calculate original display size (16px per map pixel)
     const dimensions = this.getDisplayDimensions();
     if (!dimensions) return;
 
-    const displayWidth = dimensions.width;
-    const displayHeight = dimensions.height;
+    const originalWidth = dimensions.width;
+    const originalHeight = dimensions.height;
+
+    // Calculate scale to fit map in canvas
+    const scaleX = canvas.width / originalWidth;
+    const scaleY = canvas.height / originalHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    // Calculate scaled dimensions
+    const scaledWidth = originalWidth * scale;
+    const scaledHeight = originalHeight * scale;
 
     // Clear main canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Save context state
-    ctx.save();
-
-    // Center the map on the canvas (only if map is smaller than canvas)
-    const scaledWidth = displayWidth * viewport.zoom;
-    const scaledHeight = displayHeight * viewport.zoom;
-    const centerX = Math.max(0, (canvas.width - scaledWidth) / 2);
-    const centerY = Math.max(0, (canvas.height - scaledHeight) / 2);
-
-    // Apply transformations for pan and zoom
-    ctx.translate(centerX + viewport.offset.x, centerY + viewport.offset.y);
-    ctx.scale(viewport.zoom, viewport.zoom);
+    // Center the map on the canvas
+    const centerX = (canvas.width - scaledWidth) / 2;
+    const centerY = (canvas.height - scaledHeight) / 2;
 
     // Disable image smoothing to get pixelated effect
     ctx.imageSmoothingEnabled = false;
 
-    // Draw the offscreen canvas (gradient map) with each pixel as 16px square
+    // Draw the offscreen canvas (gradient map) scaled to fit
     ctx.drawImage(
       this.offscreenCanvas,
       0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height,  // Source rectangle
-      0, 0, displayWidth, displayHeight  // Destination rectangle (16px per pixel)
+      centerX, centerY, scaledWidth, scaledHeight  // Destination rectangle (scaled and centered)
     );
 
-    // Restore context
-    ctx.restore();
-
-    // Draw pin if exists (in screen coordinates)
+    // Draw pin if exists
     const pin = this.pin();
     if (pin) {
-      this.drawPin(pin, viewport, displayWidth, displayHeight);
+      this.drawPin(pin, scaledWidth, scaledHeight, centerX, centerY);
     }
   }
 
   /**
    * Draws a pin on the canvas
    */
-  private drawPin(pin: Pin, viewport: ViewportState, displayWidth: number, displayHeight: number): void {
+  private drawPin(pin: Pin, scaledWidth: number, scaledHeight: number, offsetX: number, offsetY: number): void {
     // Only run in browser environment
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -585,19 +307,9 @@ export class GradientMapComponent implements AfterViewInit {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Calculate center offset (same logic as renderMap and placePin)
-    const scaledWidth = displayWidth * viewport.zoom;
-    const scaledHeight = displayHeight * viewport.zoom;
-    const centerX = Math.max(0, (canvas.width - scaledWidth) / 2);
-    const centerY = Math.max(0, (canvas.height - scaledHeight) / 2);
-
-    // Convert normalized coordinates to map coordinates with viewport transformation
-    const mapX = pin.coordinate.x * displayWidth;
-    const mapY = pin.coordinate.y * displayHeight;
-
-    // Apply viewport transformation with center offset
-    const x = mapX * viewport.zoom + viewport.offset.x + centerX;
-    const y = mapY * viewport.zoom + viewport.offset.y + centerY;
+    // Convert normalized coordinates to screen coordinates
+    const x = pin.coordinate.x * scaledWidth + offsetX;
+    const y = pin.coordinate.y * scaledHeight + offsetY;
 
     // Draw pin shadow
     ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';

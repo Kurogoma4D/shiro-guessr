@@ -163,6 +163,7 @@ export class GradientMapComponent implements AfterViewInit {
     }
 
     const canvas = this.canvasRef.nativeElement;
+    const screenWidth = window.innerWidth;
     const parent = canvas.parentElement;
 
     if (!parent) {
@@ -171,9 +172,15 @@ export class GradientMapComponent implements AfterViewInit {
 
     const rect = parent.getBoundingClientRect();
 
-    // Set canvas internal dimensions to match display size
+    if (screenWidth <= 480) {
+      // For mobile screens (480px or less), use 2/3 of screen width
+      canvas.height = rect.width * 2 / 3;
+    } else {
+      // For larger screens, use 1/2 of screen width
+      canvas.height = rect.width * 1 / 2;
+    }
+
     canvas.width = rect.width;
-    canvas.height = rect.height * 1.1; // 10% taller for better visibility
   }
 
 

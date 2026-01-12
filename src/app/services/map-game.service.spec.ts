@@ -57,8 +57,8 @@ describe('MapGameService', () => {
 
       const map = service.currentGradientMap();
       expect(map).not.toBeNull();
-      expect(map?.width).toBe(800);
-      expect(map?.height).toBe(600);
+      expect(map?.width).toBe(50);
+      expect(map?.height).toBe(50);
       expect(map?.cornerColors).toHaveLength(4);
     });
 

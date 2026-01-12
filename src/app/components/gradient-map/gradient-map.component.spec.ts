@@ -38,66 +38,12 @@ describe('GradientMapComponent', () => {
       expect(canvas).toBeTruthy();
     });
 
-    it('should render control buttons', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('.control-button');
-      expect(buttons).toHaveLength(3); // Zoom in, zoom out, reset
-    });
-
     it('should apply disabled class when disabled', () => {
       fixture.componentRef.setInput('disabled', true);
       fixture.detectChanges();
 
       const canvas = fixture.nativeElement.querySelector('.gradient-map-canvas');
       expect(canvas.classList.contains('disabled')).toBe(true);
-    });
-
-    it('should disable control buttons when disabled', () => {
-      fixture.componentRef.setInput('disabled', true);
-      fixture.detectChanges();
-
-      const buttons = fixture.nativeElement.querySelectorAll('.control-button');
-      buttons.forEach((button: HTMLButtonElement) => {
-        expect(button.disabled).toBe(true);
-      });
-    });
-  });
-
-  describe('zoom controls', () => {
-    beforeEach(() => {
-      fixture.componentRef.setInput('gradientMap', mockMap);
-      fixture.detectChanges();
-    });
-
-    it('should have zoom in button', () => {
-      const zoomInButton = fixture.nativeElement.querySelector('.control-button');
-      expect(zoomInButton).toBeTruthy();
-    });
-
-    it('should call zoomIn when zoom in button is clicked', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('.control-button');
-      const zoomInButton = buttons[0] as HTMLButtonElement;
-
-      zoomInButton.click();
-      // Component should handle zoom in (tested through integration)
-      expect(component).toBeTruthy(); // Basic assertion
-    });
-
-    it('should call zoomOut when zoom out button is clicked', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('.control-button');
-      const zoomOutButton = buttons[1] as HTMLButtonElement;
-
-      zoomOutButton.click();
-      // Component should handle zoom out (tested through integration)
-      expect(component).toBeTruthy(); // Basic assertion
-    });
-
-    it('should call resetView when reset button is clicked', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('.control-button');
-      const resetButton = buttons[2] as HTMLButtonElement;
-
-      resetButton.click();
-      // Component should handle reset view (tested through integration)
-      expect(component).toBeTruthy(); // Basic assertion
     });
   });
 

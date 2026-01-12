@@ -93,9 +93,12 @@ describe('GameHeaderComponent', () => {
       expect(colorDisplay.style.backgroundColor).toBe('rgb(250, 250, 250)');
     });
 
-    it('should display RGB values', () => {
-      const rgbValue = fixture.nativeElement.querySelector('.rgb-value');
-      expect(rgbValue.textContent).toContain('250, 250, 250');
+    it('should display RGB values in aria-label', () => {
+      const colorDisplay = fixture.nativeElement.querySelector('.color-display');
+      expect(colorDisplay).toBeTruthy();
+      const ariaLabel = colorDisplay.getAttribute('aria-label');
+      expect(ariaLabel).toContain('250');
+      expect(ariaLabel).toContain('Target color RGB');
     });
 
     it('should display formatted timer', () => {

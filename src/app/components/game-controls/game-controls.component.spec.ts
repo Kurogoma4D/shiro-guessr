@@ -121,17 +121,18 @@ describe('GameControlsComponent', () => {
       fixture.componentRef.setInput('hasPin', false);
       fixture.detectChanges();
 
-      const hintText = fixture.nativeElement.querySelector('.hint-text');
-      expect(hintText).toBeTruthy();
-      expect(hintText.textContent).toContain('Place a pin');
+      const button = fixture.nativeElement.querySelector('.guess-button');
+      const ariaLabel = button.getAttribute('aria-label');
+      expect(ariaLabel).toContain('Place a pin');
     });
 
     it('should not show hint text when pin is placed', () => {
       fixture.componentRef.setInput('hasPin', true);
       fixture.detectChanges();
 
-      const hintText = fixture.nativeElement.querySelector('.hint-text');
-      expect(hintText).toBeFalsy();
+      const button = fixture.nativeElement.querySelector('.guess-button');
+      const ariaLabel = button.getAttribute('aria-label');
+      expect(ariaLabel).toContain('Submit your guess');
     });
 
     it('should emit guess event when button is clicked', () => {

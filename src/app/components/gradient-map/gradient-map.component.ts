@@ -313,17 +313,60 @@ export class GradientMapComponent implements AfterViewInit {
       centerX, centerY, scaledWidth, scaledHeight  // Destination rectangle (scaled and centered)
     );
 
-    // Draw target pin if exists (in green)
+    // Get pins
     const targetPin = this.targetPin();
+    const pin = this.pin();
+
+    // Draw dashed line between pins if both exist
+    if (targetPin && pin) {
+      this.drawConnectionLine(ctx, pin, targetPin, scaledWidth, scaledHeight, centerX, centerY);
+    }
+
+    // Draw target pin if exists (in green)
     if (targetPin) {
       this.drawPin(targetPin, scaledWidth, scaledHeight, centerX, centerY, '#10b981');
     }
 
     // Draw user pin if exists (in red)
-    const pin = this.pin();
     if (pin) {
       this.drawPin(pin, scaledWidth, scaledHeight, centerX, centerY, '#ef4444');
     }
+  }
+
+  /**
+   * Draws a dashed connection line between two pins
+   */
+  private drawConnectionLine(
+    ctx: CanvasRenderingContext2D,
+    pin1: Pin,
+    pin2: Pin,
+    scaledWidth: number,
+    scaledHeight: number,
+    offsetX: number,
+    offsetY: number
+  ): void {
+    // Only run in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Convert normalized coordinates to screen coordinates
+    const x1 = pin1.coordinate.x * scaledWidth + offsetX;
+    const y1 = pin1.coordinate.y * scaledHeight + offsetY;
+    const x2 = pin2.coordinate.x * scaledWidth + offsetX;
+    const y2 = pin2.coordinate.y * scaledHeight + offsetY;
+
+    // Draw dashed line
+    ctx.beginPath();
+    ctx.setLineDash([8, 6]); // 8px dash, 6px gap
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.lineWidth = 2;
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Reset line dash
+    ctx.setLineDash([]);
   }
 
   /**

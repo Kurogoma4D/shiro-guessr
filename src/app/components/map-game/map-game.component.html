@@ -25,6 +25,15 @@
         <div class="round-result-overlay">
           <div class="result-card">
             <h2 class="result-title">Round {{ currentRound()!.roundNumber }} Complete!</h2>
+
+            <div class="result-map-container">
+              <app-gradient-map
+                [gradientMap]="currentGradientMap()"
+                [pin]="currentRound()!.pin || null"
+                [targetPin]="currentRound()!.targetPin || null"
+                [disabled]="true" />
+            </div>
+
             <div class="result-stats">
               <div class="stat">
                 <span class="stat-label">Distance</span>

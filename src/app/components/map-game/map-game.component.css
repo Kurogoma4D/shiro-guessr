@@ -30,7 +30,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -81,6 +83,15 @@
   line-height: var(--md-sys-typescale-headline-large-line-height);
   color: var(--md-sys-color-on-surface);
   text-align: center;
+}
+
+.result-map-container {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  margin-bottom: 1.5rem;
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+  box-shadow: var(--md-sys-elevation-level2);
 }
 
 .result-stats {
@@ -204,6 +215,11 @@
 
   .result-title {
     font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-map-container {
+    aspect-ratio: 3 / 2;
     margin-bottom: 1rem;
   }
 

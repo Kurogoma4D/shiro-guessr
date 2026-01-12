@@ -38,7 +38,8 @@
   align-items: flex-end;
   z-index: 1000;
   pointer-events: none;
-  animation: fadeIn 0.3s ease;
+  /* Delay overlay blur to allow pin animation to be visible */
+  animation: fadeIn 0.3s ease 700ms backwards;
 }
 
 @keyframes fadeIn {
@@ -60,7 +61,8 @@
   width: 100%;
   margin-bottom: 0;
   pointer-events: auto;
-  animation: slideUp var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
+  /* Delay card animation to allow pin animation to complete first */
+  animation: slideUp var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate) 700ms backwards;
 }
 
 @keyframes slideUp {

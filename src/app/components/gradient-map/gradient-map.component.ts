@@ -5,6 +5,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  OnDestroy,
   effect,
   inject,
   PLATFORM_ID,
@@ -24,7 +25,7 @@ import { GradientMapService } from '../../services/gradient-map.service';
   templateUrl: './gradient-map.component.html',
   styleUrl: './gradient-map.component.css',
 })
-export class GradientMapComponent implements AfterViewInit {
+export class GradientMapComponent implements AfterViewInit, OnDestroy {
   private readonly gradientMapService = inject(GradientMapService);
   private readonly platformId = inject(PLATFORM_ID);
 
@@ -75,6 +76,17 @@ export class GradientMapComponent implements AfterViewInit {
    */
   private lastRenderedMap: GradientMap | null = null;
 
+  /**
+   * Animation state for target pin and connection line
+   */
+  private animationProgress = 0;
+  private animationStartTime = 0;
+  private isAnimating = false;
+  private animationFrameId: number | null = null;
+  private readonly ANIMATION_DURATION = 600; // ms - M3 Expressive extended duration
+  private readonly PIN_ANIMATION_DURATION = 400; // ms - Pin appears first
+  private lastTargetPin: Pin | null = null;
+
   constructor() {
     // Effect to render the map when it changes
     effect(() => {
@@ -112,13 +124,19 @@ export class GradientMapComponent implements AfterViewInit {
     // Effect to re-render when targetPin changes
     effect(() => {
       // Subscribe to targetPin changes
-      this.targetPin();
+      const currentTargetPin = this.targetPin();
 
       // Use untracked to read gradientMap without subscribing to it
       untracked(() => {
         const map = this.gradientMap();
         if (map && this.canvasRef) {
-          this.renderMap(map);
+          // Check if targetPin actually changed
+          if (currentTargetPin && currentTargetPin !== this.lastTargetPin) {
+            this.lastTargetPin = currentTargetPin;
+            this.startAnimation();
+          } else {
+            this.renderMap(map);
+          }
         }
       });
     });
@@ -152,6 +170,72 @@ export class GradientMapComponent implements AfterViewInit {
         }
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up animation frame
+    if (this.animationFrameId !== null && typeof window !== 'undefined') {
+      window.cancelAnimationFrame(this.animationFrameId);
+    }
+  }
+
+  /**
+   * Starts animation for target pin and connection line
+   */
+  private startAnimation(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Cancel any existing animation
+    if (this.animationFrameId !== null) {
+      window.cancelAnimationFrame(this.animationFrameId);
+    }
+
+    this.isAnimating = true;
+    this.animationStartTime = performance.now();
+    this.animate();
+  }
+
+  /**
+   * Animation loop using requestAnimationFrame
+   */
+  private animate(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const currentTime = performance.now();
+    const elapsed = currentTime - this.animationStartTime;
+
+    // Update animation progress (0 to 1)
+    this.animationProgress = Math.min(elapsed / this.ANIMATION_DURATION, 1);
+
+    // Render frame
+    const map = this.gradientMap();
+    if (map) {
+      this.renderMap(map);
+    }
+
+    // Continue animation if not complete
+    if (this.animationProgress < 1) {
+      this.animationFrameId = window.requestAnimationFrame(() => this.animate());
+    } else {
+      this.isAnimating = false;
+      this.animationFrameId = null;
+    }
+  }
+
+  /**
+   * M3 Emphasized easing function (cubic-bezier(0.2, 0.0, 0, 1.0))
+   * Provides more expressive, dynamic motion
+   */
+  private emphasizedEasing(t: number): number {
+    // Simplified approximation of cubic-bezier(0.2, 0.0, 0, 1.0)
+    // This provides a fast start with gradual deceleration
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
   /**
@@ -317,14 +401,25 @@ export class GradientMapComponent implements AfterViewInit {
     const targetPin = this.targetPin();
     const pin = this.pin();
 
+    // Calculate animation parameters
+    const pinProgress = this.isAnimating
+      ? Math.min((this.animationProgress * this.ANIMATION_DURATION) / this.PIN_ANIMATION_DURATION, 1)
+      : 1;
+    const lineProgress = this.isAnimating && this.animationProgress > 0.3
+      ? Math.min((this.animationProgress - 0.3) / 0.7, 1)
+      : this.isAnimating ? 0 : 1;
+
+    const easedPinProgress = this.emphasizedEasing(pinProgress);
+    const easedLineProgress = this.emphasizedEasing(lineProgress);
+
     // Draw dashed line between pins if both exist
     if (targetPin && pin) {
-      this.drawConnectionLine(ctx, pin, targetPin, scaledWidth, scaledHeight, centerX, centerY);
+      this.drawConnectionLine(ctx, pin, targetPin, scaledWidth, scaledHeight, centerX, centerY, easedLineProgress);
     }
 
-    // Draw target pin if exists (in green)
+    // Draw target pin if exists (in green) with animation
     if (targetPin) {
-      this.drawPin(targetPin, scaledWidth, scaledHeight, centerX, centerY, '#10b981');
+      this.drawPin(targetPin, scaledWidth, scaledHeight, centerX, centerY, '#10b981', easedPinProgress);
     }
 
     // Draw user pin if exists (in red)
@@ -334,7 +429,8 @@ export class GradientMapComponent implements AfterViewInit {
   }
 
   /**
-   * Draws a dashed connection line between two pins
+   * Draws a dashed connection line between two pins with animation
+   * Line animates from user pin (pin1) to target pin (pin2)
    */
   private drawConnectionLine(
     ctx: CanvasRenderingContext2D,
@@ -343,7 +439,8 @@ export class GradientMapComponent implements AfterViewInit {
     scaledWidth: number,
     scaledHeight: number,
     offsetX: number,
-    offsetY: number
+    offsetY: number,
+    progress: number = 1
   ): void {
     // Only run in browser environment
     if (!isPlatformBrowser(this.platformId)) {
@@ -356,13 +453,17 @@ export class GradientMapComponent implements AfterViewInit {
     const x2 = pin2.coordinate.x * scaledWidth + offsetX;
     const y2 = pin2.coordinate.y * scaledHeight + offsetY;
 
-    // Draw dashed line
+    // Calculate intermediate point based on progress (animate from user to target)
+    const currentX = x1 + (x2 - x1) * progress;
+    const currentY = y1 + (y2 - y1) * progress;
+
+    // Draw dashed line with fade-in effect
     ctx.beginPath();
     ctx.setLineDash([8, 6]); // 8px dash, 6px gap
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.strokeStyle = `rgba(0, 0, 0, ${0.2 * progress})`; // Fade in
     ctx.lineWidth = 2;
     ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.lineTo(currentX, currentY);
     ctx.stroke();
 
     // Reset line dash
@@ -370,7 +471,7 @@ export class GradientMapComponent implements AfterViewInit {
   }
 
   /**
-   * Draws a pin on the canvas
+   * Draws a pin on the canvas with animation support
    */
   private drawPin(
     pin: Pin,
@@ -378,7 +479,8 @@ export class GradientMapComponent implements AfterViewInit {
     scaledHeight: number,
     offsetX: number,
     offsetY: number,
-    color: string = '#ef4444'
+    color: string = '#ef4444',
+    progress: number = 1
   ): void {
     // Only run in browser environment
     if (!isPlatformBrowser(this.platformId)) {
@@ -395,7 +497,7 @@ export class GradientMapComponent implements AfterViewInit {
 
     // Draw different designs based on color (green = flag for target, red = circle for user)
     if (color === '#10b981') {
-      this.drawFlag(ctx, x, y, color);
+      this.drawFlag(ctx, x, y, color, progress);
     } else {
       this.drawCirclePin(ctx, x, y, color);
     }
@@ -441,12 +543,35 @@ export class GradientMapComponent implements AfterViewInit {
   }
 
   /**
-   * Draws a star pin (for target location)
+   * Draws a star pin (for target location) with M3 Expressive animation
+   * Features pop-in effect with overshoot and fade-in
    */
-  private drawFlag(ctx: CanvasRenderingContext2D, x: number, y: number, color: string): void {
+  private drawFlag(ctx: CanvasRenderingContext2D, x: number, y: number, color: string, progress: number = 1): void {
     const outerRadius = 12;
     const innerRadius = 6;
     const points = 5;
+
+    // M3 Expressive: Overshoot effect (scale goes slightly above 1.0 before settling)
+    let scale: number;
+    if (progress < 0.7) {
+      // Rapid scale up
+      scale = progress / 0.7;
+    } else {
+      // Slight overshoot and settle
+      const overshootProgress = (progress - 0.7) / 0.3;
+      scale = 1 + 0.15 * Math.sin(overshootProgress * Math.PI);
+    }
+
+    // Fade in opacity
+    const opacity = progress;
+
+    // Save context for transform
+    ctx.save();
+
+    // Apply scale transform
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = opacity;
 
     // Draw star shadow
     ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
@@ -459,8 +584,8 @@ export class GradientMapComponent implements AfterViewInit {
     for (let i = 0; i < points * 2; i++) {
       const radius = i % 2 === 0 ? outerRadius : innerRadius;
       const angle = (Math.PI / points) * i - Math.PI / 2;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius;
+      const px = Math.cos(angle) * radius;
+      const py = Math.sin(angle) * radius;
 
       if (i === 0) {
         ctx.moveTo(px, py);
@@ -483,8 +608,8 @@ export class GradientMapComponent implements AfterViewInit {
     for (let i = 0; i < points * 2; i++) {
       const radius = i % 2 === 0 ? outerRadius : innerRadius;
       const angle = (Math.PI / points) * i - Math.PI / 2;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius;
+      const px = Math.cos(angle) * radius;
+      const py = Math.sin(angle) * radius;
 
       if (i === 0) {
         ctx.moveTo(px, py);
@@ -500,7 +625,10 @@ export class GradientMapComponent implements AfterViewInit {
     // Draw star center
     ctx.beginPath();
     ctx.fillStyle = 'white';
-    ctx.arc(x, y, 2, 0, Math.PI * 2);
+    ctx.arc(0, 0, 2, 0, Math.PI * 2);
     ctx.fill();
+
+    // Restore context
+    ctx.restore();
   }
 }

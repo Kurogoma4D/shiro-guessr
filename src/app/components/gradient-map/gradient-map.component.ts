@@ -350,6 +350,21 @@ export class GradientMapComponent implements AfterViewInit {
     const x = pin.coordinate.x * scaledWidth + offsetX;
     const y = pin.coordinate.y * scaledHeight + offsetY;
 
+    // Draw different designs based on color (green = flag for target, red = circle for user)
+    if (color === '#10b981') {
+      this.drawFlag(ctx, x, y, color);
+    } else {
+      this.drawCirclePin(ctx, x, y, color);
+    }
+  }
+
+  /**
+   * Draws a circle pin (for user's answer)
+   */
+  private drawCirclePin(ctx: CanvasRenderingContext2D, x: number, y: number, color: string): void {
+    const radius = 8;
+    const centerRadius = 2;
+
     // Draw pin shadow
     ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
     ctx.shadowBlur = 8;
@@ -359,7 +374,7 @@ export class GradientMapComponent implements AfterViewInit {
     // Draw pin body
     ctx.beginPath();
     ctx.fillStyle = color;
-    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
 
     // Reset shadow
@@ -371,14 +386,78 @@ export class GradientMapComponent implements AfterViewInit {
     // Draw pin outline
     ctx.beginPath();
     ctx.strokeStyle = 'white';
-    ctx.lineWidth = 3;
-    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.lineWidth = 1.5;
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.stroke();
 
     // Draw pin center
     ctx.beginPath();
     ctx.fillStyle = 'white';
-    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.arc(x, y, centerRadius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /**
+   * Draws a star pin (for target location)
+   */
+  private drawFlag(ctx: CanvasRenderingContext2D, x: number, y: number, color: string): void {
+    const outerRadius = 12;
+    const innerRadius = 6;
+    const points = 5;
+
+    // Draw star shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 2;
+
+    // Draw star body
+    ctx.beginPath();
+    for (let i = 0; i < points * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = (Math.PI / points) * i - Math.PI / 2;
+      const px = x + Math.cos(angle) * radius;
+      const py = y + Math.sin(angle) * radius;
+
+      if (i === 0) {
+        ctx.moveTo(px, py);
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // Reset shadow
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    // Draw star outline
+    ctx.beginPath();
+    for (let i = 0; i < points * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = (Math.PI / points) * i - Math.PI / 2;
+      const px = x + Math.cos(angle) * radius;
+      const py = y + Math.sin(angle) * radius;
+
+      if (i === 0) {
+        ctx.moveTo(px, py);
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Draw star center
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.arc(x, y, 2, 0, Math.PI * 2);
     ctx.fill();
   }
 }

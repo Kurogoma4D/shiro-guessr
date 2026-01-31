@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "W8476NSA2M.com.kurogoma4d.ShiroGuessr",
+        "paths": ["/ios", "/ios/*"]
+      }
+    ]
+  }
+}

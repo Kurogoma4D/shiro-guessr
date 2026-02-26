@@ -22,6 +22,11 @@ export const routes: Routes = [
       import('./components/map-game/map-game.component').then((m) => m.MapGameComponent),
   },
   {
+    path: 'app',
+    loadComponent: () =>
+      import('./components/ios-landing/ios-landing.component').then((m) => m.IosLandingComponent),
+  },
+  {
     path: 'privacy-policy',
     loadComponent: () =>
       import('./components/privacy-policy/privacy-policy.component').then((m) => m.PrivacyPolicyComponent),

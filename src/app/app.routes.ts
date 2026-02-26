@@ -21,4 +21,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/map-game/map-game.component').then((m) => m.MapGameComponent),
   },
+  {
+    path: 'privacy-policy',
+    loadComponent: () =>
+      import('./components/privacy-policy/privacy-policy.component').then((m) => m.PrivacyPolicyComponent),
+  },
 ];

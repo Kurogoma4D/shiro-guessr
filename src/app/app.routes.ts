@@ -27,6 +27,11 @@ export const routes: Routes = [
       import('./components/ios-landing/ios-landing.component').then((m) => m.IosLandingComponent),
   },
   {
+    path: 'support',
+    loadComponent: () =>
+      import('./components/support/support.component').then((m) => m.SupportComponent),
+  },
+  {
     path: 'privacy-policy',
     loadComponent: () =>
       import('./components/privacy-policy/privacy-policy.component').then((m) => m.PrivacyPolicyComponent),

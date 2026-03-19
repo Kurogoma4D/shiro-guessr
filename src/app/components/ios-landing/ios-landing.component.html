@@ -8,18 +8,32 @@
       <p class="hero__description">
         グラデーションマップから指定された色の位置を見つけ出す、新感覚カラーパズルゲーム。
       </p>
-      <a
-        class="hero__appstore-link"
-        href="https://apps.apple.com/jp/app/白Guessr/id6758566277"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="App Storeからダウンロード">
-        <svg class="hero__appstore-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
-          <rect width="120" height="40" rx="6" fill="#000" />
-          <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">Download on the</text>
-          <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">App Store</text>
-        </svg>
-      </a>
+      <div class="hero__store-links">
+        <a
+          class="hero__store-link"
+          href="https://apps.apple.com/jp/app/白Guessr/id6758566277"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="App Storeからダウンロード">
+          <svg class="hero__store-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
+            <rect width="120" height="40" rx="6" fill="#000" />
+            <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">Download on the</text>
+            <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">App Store</text>
+          </svg>
+        </a>
+        <a
+          class="hero__store-link"
+          href="https://play.google.com/store/apps/details?id=dev.krgm4d.shiroguessr"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Google Playで手に入れよう">
+          <svg class="hero__store-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Get it on Google Play">
+            <rect width="120" height="40" rx="6" fill="#000" />
+            <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">GET IT ON</text>
+            <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">Google Play</text>
+          </svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -97,25 +111,40 @@
   <section class="cta">
     <h2 class="cta__title">今すぐダウンロード</h2>
     <p class="cta__text">あなたの色彩感覚を試してみよう。</p>
-    <a
-      class="cta__appstore-link"
-      href="https://apps.apple.com/jp/app/白Guessr/id6758566277"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="App Storeからダウンロード">
-      <svg class="cta__appstore-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
-        <rect width="120" height="40" rx="6" fill="#000" />
-        <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">Download on the</text>
-        <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">App Store</text>
-      </svg>
-    </a>
+    <div class="cta__store-links">
+      <a
+        class="cta__store-link"
+        href="https://apps.apple.com/jp/app/白Guessr/id6758566277"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="App Storeからダウンロード">
+        <svg class="cta__store-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Download on the App Store">
+          <rect width="120" height="40" rx="6" fill="#000" />
+          <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">Download on the</text>
+          <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">App Store</text>
+        </svg>
+      </a>
+      <a
+        class="cta__store-link"
+        href="https://play.google.com/store/apps/details?id=dev.krgm4d.shiroguessr"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Google Playで手に入れよう">
+        <svg class="cta__store-badge" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Get it on Google Play">
+          <rect width="120" height="40" rx="6" fill="#000" />
+          <text x="60" y="14" text-anchor="middle" fill="#fff" font-size="7" font-family="sans-serif">GET IT ON</text>
+          <text x="60" y="28" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">Google Play</text>
+        </svg>
+      </a>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer__links">
       <a class="footer__link" routerLink="/privacy-policy">プライバシーポリシー</a>
-      <a class="footer__link" href="https://github.com/Kurogoma4D/ShiroGuessr-iOS" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="footer__link" href="https://github.com/Kurogoma4D/ShiroGuessr-iOS" target="_blank" rel="noopener noreferrer">GitHub (iOS)</a>
+      <a class="footer__link" href="https://github.com/Kurogoma4D/ShiroGuessr-Android" target="_blank" rel="noopener noreferrer">GitHub (Android)</a>
     </div>
     <p class="footer__copyright">&copy; 2026 Kurogoma4D</p>
   </footer>

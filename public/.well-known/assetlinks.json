@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.krgm4d.shiroguessr",
+      "sha256_cert_fingerprints": [
+        "9F:F9:27:9B:B4:47:DF:97:1E:6F:59:B4:D6:63:4C:B0:67:76:23:72:05:06:CD:74:01:EE:C1:A2:C9:EE:0C:8B"
+      ]
+    }
+  }
+]

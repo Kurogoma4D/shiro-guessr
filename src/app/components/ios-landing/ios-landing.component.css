@@ -58,21 +58,29 @@
   margin-bottom: var(--spacing-xl);
 }
 
-.hero__appstore-link,
-.cta__appstore-link {
+.hero__store-links,
+.cta__store-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.hero__store-link,
+.cta__store-link {
   display: inline-block;
   transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
-.hero__appstore-link:hover,
-.cta__appstore-link:hover {
+.hero__store-link:hover,
+.cta__store-link:hover {
   transform: scale(1.05);
   opacity: 0.9;
   text-decoration: none;
 }
 
-.hero__appstore-badge,
-.cta__appstore-badge {
+.hero__store-badge,
+.cta__store-badge {
   width: 180px;
   height: 60px;
 }
